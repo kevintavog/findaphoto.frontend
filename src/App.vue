@@ -1,16 +1,16 @@
 <template>
-  <div id="app">
+  <div id="app" class="fp-color-white">
     <div id="error" v-if="this.$store.state.serverResponse.errorMessage !== undefined">
       <div role="alert" class="c-alert c-alert--error">
         Message: {{this.$store.state.serverResponse.errorMessage}}
       </div>
     </div>
-    <div id="nav">
-      <router-link to="/search" class="c-nav__item navigation-item"> <font-awesome-icon icon="home"/> Search </router-link> |
-      <router-link to="/byday" class="c-nav__item navigation-item"> <font-awesome-icon icon="calendar"/> By Day</router-link> |
-      <router-link to="/map" class="c-nav__item navigation-item" > <font-awesome-icon icon="map"/> Map</router-link> |
-      <router-link to="/about" class="c-nav__item navigation-item"> <font-awesome-icon icon="info"/> About</router-link>
-    </div>
+    <ul class="navigation-group">
+      <li class="navigation-item"> <router-link to="/search"> <font-awesome-icon icon="home"/> Search </router-link> </li>
+      <li class="navigation-item"> <router-link to="/byday"> <font-awesome-icon icon="calendar"/> By Day</router-link> </li>
+      <li class="navigation-item"> <router-link to="/map"> <font-awesome-icon icon="map"/> Map</router-link> </li>
+      <li class="navigation-item"> <router-link to="/about"> <font-awesome-icon icon="info"/> About</router-link> </li>
+    </ul>
     <router-view/>
   </div>
 </template>
@@ -27,20 +27,25 @@ export default class App extends Vue {
 
 <style>
 html {
-    height:100%;
-    margin:0;
+  height:100%;
+  margin:0;
 }
 
 body {
-    background-color:#202020;
-    color:#ffffff;
-    height:100%;
-    margin:0;
+  background-color:#202020;
+  height:100%;
+  margin:0;
 }
 
-a{color: white;}
+.fp-color-white {
+  color: white;
+}
+
+a{
+  color: white;
+}
 a:visited{
-    color:white;
+  color:white;
 }
 
 #app {
@@ -50,10 +55,29 @@ a:visited{
   text-align: center;
 }
 
+.navigation-group {
+  background-color: #111;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  z-index: 3;
+  display: inline-flex;
+}
+
+.navigation-item {
+  text-decoration: none;
+  cursor: pointer;
+  display: block;
+  height: 3.5em;
+  padding: 0 1em;
+  color: inherit;
+  line-height: 3.5em;
+}
+
 @media (max-width: 420px){
-    .navigation-item {
-        padding: 0 0 0 7px;
-    }
+  .navigation-item {
+    padding: 0 0 0 7px;
+  }
 }
 div a {
   text-decoration: none;

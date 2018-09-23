@@ -8,7 +8,6 @@ import { faCalendar, faCaretLeft, faCaretRight, faFastBackward, faFastForward,
 
 import 'blaze-css/dist/blaze.min.css'
 
-
 /* tslint:disable:no-var-requires */
 const fontawesome = require('@fortawesome/vue-fontawesome')
 
