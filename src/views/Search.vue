@@ -8,7 +8,7 @@
       <button class="c-button c-button--info" type="submit" @click="onSearch" > <font-awesome-icon icon="search"/> Search</button>
     </div>
 
-    <div v-if="results" >
+    <div v-if="results && isSearching === false" >
 
       <!-- The results header -->
       <h2 class="search-result-info" v-if="results.totalMatches == 0">
@@ -105,13 +105,13 @@ export default class Search extends Vue {
     ',thumbUrl,slideUrl,warnings'
   private typedText: string = ''
   private resultsSearchText: string = ''
-
   private displayer = dataDisplayer
 
   private mounted() {
     const query = this.$route.query
     if ('q' in query || 't' in query) {
       const searchRequest = searchRouteBuilder.toSearchRequest(query)
+      searchRequest.properties = Search.QueryProperties
       searchService.search(searchRequest)
       this.typedText = this.resultsSearchText = searchRequest.searchText
     }
@@ -127,7 +127,12 @@ export default class Search extends Vue {
 
   @Watch('$route')
   private onRouteChanged(to: any, from: any) {
-    searchService.search(searchRouteBuilder.toSearchRequest(to.query))
+    const searchRequest = searchRouteBuilder.toSearchRequest(to.query)
+    searchService.search(searchRequest)
+  }
+
+  private get isSearching(): boolean {
+    return this.$store.state.serverResponse.isSearching
   }
 
   private get results(): SearchResults {

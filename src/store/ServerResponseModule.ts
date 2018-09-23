@@ -23,6 +23,8 @@ export default class ServerResponseModule extends VuexModule {
     public setServerError(message: string) {
         this.errorMessage = message
         this.results = undefined
+        this.totalPages = 0
+        this.currentPage = 0
         this.isSearching = false
     }
 
@@ -30,9 +32,9 @@ export default class ServerResponseModule extends VuexModule {
     public setServerResults(data: [SearchResults, SearchRequest]) {
         this.errorMessage = undefined
         this.results = data[0]
-        this.isSearching = false
 
         this.totalPages = Math.ceil(data[0].totalMatches / data[1].pageCount)
         this.currentPage = Math.round(1 + (data[1].first / data[1].pageCount))
+        this.isSearching = false
     }
 }

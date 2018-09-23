@@ -1,5 +1,5 @@
 <template>
-  <div class="paging o-container o-container--medium" v-if="results">
+  <div class="paging o-container o-container--medium" v-if="serverResponse.results && totalPages > 0">
     <nav class="c-pagination">
 
       <button class="c-pagination__control enabled_color" @click="firstPage()" v-if="currentPage > 1" > <font-awesome-icon icon="fast-backward"/> </button>
@@ -63,11 +63,7 @@ export default class Paging extends Vue {
     this.$router.push({ path: 'search', query: searchRouteBuilder.toParameters(searchRequest)})
   }
 
-  get results(): SearchResults {
-    return this.$store.state.serverResponse.results
-  }
-
-  get serverResponse(): ServerResponseModule {
+  private get serverResponse(): ServerResponseModule {
     return this.$store.state.serverResponse
   }
 
