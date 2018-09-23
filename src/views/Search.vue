@@ -104,31 +104,44 @@ export default class Search extends Vue {
   public static QueryProperties: string = 'id,city,keywords,imageName,createdDate,latitude,longitude' +
     ',thumbUrl,slideUrl,warnings'
   private typedText: string = ''
-  private resultsSearchText: string = ''
+  private resultsSearchText?: string = undefined
   private displayer = dataDisplayer
 
-  private mounted() {
-    const query = this.$route.query
-    if ('q' in query || 't' in query) {
+  private invokeSearchService(query: any): void {
       const searchRequest = searchRouteBuilder.toSearchRequest(query)
       searchRequest.properties = Search.QueryProperties
       searchService.search(searchRequest)
       this.typedText = this.resultsSearchText = searchRequest.searchText
-    }
   }
 
   private onSearch(): void {
-    if (this.resultsSearchText && this.resultsSearchText !== this.typedText) {
-      console.log('Search has changed, enable back button')
+    // Only update on a change
+    if (this.resultsSearchText === undefined || this.resultsSearchText !== this.typedText) {
+      // Rather than search directly, update the URL, which will indirectly invoke onRouteChanged
+      // This will add the searches to the browser history
+      const searchRequest = this.$store.state.serverRequest.request
+      searchRequest.first = 1
+      searchRequest.searchType = 's'
+      searchRequest.searchText = this.typedText
+      searchRequest.properties = Search.QueryProperties
+      searchRequest.pageCount = SearchRequest.defaultItemsPerPage
+
+      this.resultsSearchText = this.typedText
+
+      this.$router.push({ path: 'search', query: searchRouteBuilder.toParameters(searchRequest)})
     }
-    this.resultsSearchText = this.typedText
-    searchService.searchByText(this.typedText, Search.QueryProperties, 1, SearchRequest.defaultItemsPerPage, '')
+  }
+
+  private mounted() {
+    const query = this.$route.query
+    if ('q' in query || 't' in query) {
+      this.invokeSearchService(query)
+    }
   }
 
   @Watch('$route')
   private onRouteChanged(to: any, from: any) {
-    const searchRequest = searchRouteBuilder.toSearchRequest(to.query)
-    searchService.search(searchRequest)
+    this.invokeSearchService(to.query)
   }
 
   private get isSearching(): boolean {
