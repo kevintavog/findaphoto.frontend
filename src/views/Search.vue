@@ -85,11 +85,13 @@
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { searchService } from '@/services/SearchService'
 import { SearchResults } from '@/models/SearchResults'
-import { DataDisplayerProvider } from '@/providers/DataDisplayerProvider'
+import { dataDisplayer } from '@/providers/DataDisplayerProvider'
+import { SearchRequest } from '@/models/SearchRequest'
 import Paging from '@/components/Paging.vue'
+import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 
 
 @Component({
@@ -104,25 +106,37 @@ export default class Search extends Vue {
   private typedText: string = ''
   private resultsSearchText: string = ''
 
-  private pageSize = 50
-  private displayer = new DataDisplayerProvider()
+  private displayer = dataDisplayer
 
+  private mounted() {
+    const query = this.$route.query
+    if ('q' in query || 't' in query) {
+      const searchRequest = searchRouteBuilder.toSearchRequest(query)
+      searchService.search(searchRequest)
+      this.typedText = this.resultsSearchText = searchRequest.searchText
+    }
+  }
 
   private onSearch(): void {
     if (this.resultsSearchText && this.resultsSearchText !== this.typedText) {
       console.log('Search has changed, enable back button')
     }
     this.resultsSearchText = this.typedText
-    searchService.searchByText(this.typedText, Search.QueryProperties, 1, this.pageSize, '')
+    searchService.searchByText(this.typedText, Search.QueryProperties, 1, SearchRequest.defaultItemsPerPage, '')
   }
 
-  get results(): SearchResults {
+  @Watch('$route')
+  private onRouteChanged(to: any, from: any) {
+    searchService.search(searchRouteBuilder.toSearchRequest(to.query))
+  }
+
+  private get results(): SearchResults {
     return this.$store.state.serverResponse.results
   }
 
-  get pageCount(): number {
+  private get pageCount(): number {
     if (this.results) {
-      return Math.ceil(this.results.totalMatches / this.pageSize)
+      return Math.ceil(this.results.totalMatches / this.$store.state.serverRequest.request.pageCount)
     }
     return 0
   }

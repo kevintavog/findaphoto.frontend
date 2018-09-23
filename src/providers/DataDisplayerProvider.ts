@@ -118,5 +118,6 @@ export class DataDisplayerProvider {
             minutes: m,
             seconds: s}
     }
-
 }
+
+export const dataDisplayer = new DataDisplayerProvider()

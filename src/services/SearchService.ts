@@ -31,7 +31,7 @@ class SearchService {
     this.search(searchRequest)
   }
 
-  private search(request: SearchRequest) {
+  public search(request: SearchRequest) {
     let url = '/api/search?q=' + request.searchText + '&first=' + request.first + '&count='
         + request.pageCount + '&properties='
         + request.properties + '&categories=keywords,tags,placename,date'

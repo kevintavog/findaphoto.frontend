@@ -31,6 +31,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { SearchResults } from '@/models/SearchResults'
 import ServerResponseModule from '@/store/ServerResponseModule'
 import { searchService } from '@/services/SearchService'
+import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 
 
 @Component
@@ -56,7 +57,10 @@ export default class Paging extends Vue {
   }
 
   private gotoPage(pageNumber: number) {
-    searchService.gotoPage(pageNumber)
+    const searchRequest = this.$store.state.serverRequest.request
+    searchRequest.first = 1 + ((pageNumber - 1) * searchRequest.pageCount)
+
+    this.$router.push({ path: 'search', query: searchRouteBuilder.toParameters(searchRequest)})
   }
 
   get results(): SearchResults {
