@@ -36,7 +36,30 @@ export interface SearchItem {
     thumbUrl: string
     warnings: string[]
     distanceKm: number
+    tags: string[]
 }
+
+export const emptySearchItem: SearchItem = {
+    city: '',
+    createdDate: new Date(),
+    id: '',
+    imageName: '',
+    keywords: [],
+    latitude: 0,
+    locationName: '',
+    locationDisplayName: '',
+    longitude: 0,
+    mediaType: '',
+    mediaUrl: '',
+    mimeType: '',
+    path: '',
+    slideUrl: '',
+    thumbUrl: '',
+    warnings: [],
+    distanceKm: 0,
+    tags: [],
+} as SearchItem
+
 
 export interface SearchCategory {
     field: string

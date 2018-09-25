@@ -15,6 +15,13 @@ export class DataDisplayerProvider {
         return item.keywords.join(', ')
     }
 
+    public tagsString(item: SearchItem): string {
+        if (!item.tags) {
+            return ''
+        }
+        return item.tags.sort().join(', ')
+    }
+
     public itemYear(item: SearchItem) {
         const date = this.getItemDate(item)
         if (date != null) {

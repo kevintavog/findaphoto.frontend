@@ -36,10 +36,10 @@
               <div v-for="item in group.items" :key="item.id" class="group-item">
 
                 <div class="group-item-thumbnail">
-                        <img :src="item.thumbUrl" >
-                    <!-- <a [routerLink]="['/singleitem']" [queryParams]="singleItemSearchLinkParameters(item, itemIndex, group.resultIndex)">
-                        <img src="{{item.thumbUrl}}" >
-                    </a> -->
+                  <!-- TODO: In order for slideshow to work, overall search index is needed (group index + item index) -->
+                  <router-link :to="{ path: 'singleitem', query: { id: item.id }}">
+                    <img :src="item.thumbUrl" >
+                  </router-link>
                 </div>
 
                 <div class="group-item-info">
