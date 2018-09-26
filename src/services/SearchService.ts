@@ -19,29 +19,10 @@ class SearchService {
     this.search(searchRequest)
   }
 
-  public searchByText(searchText: string, properties: string, first: number, pageCount: number, drilldown: string) {
-    const searchRequest = store.state.serverRequest.request
-    searchRequest.searchType = 's'
-    searchRequest.properties = properties
-    searchRequest.first = first
-    searchRequest.pageCount = pageCount
-    searchRequest.searchText = searchText
-    searchRequest.drilldown = drilldown
-
-    this.search(searchRequest)
-  }
-
   public search(request: SearchRequest) {
-    let url = '/api/search?q=' + request.searchText + '&first=' + request.first + '&count='
-        + request.pageCount + '&properties='
-        + request.properties + '&categories=keywords,tags,placename,date'
-    if (request.drilldown !== undefined && request.drilldown.length > 0) {
-        url += '&drilldown=' + request.drilldown
-    }
-
     store.commit('startSearch')
     store.commit('updateRequest', request)
-    axios.get(url)
+    axios.get(this.buildUrl(request))
       .then((response) => {
         const results = response.data as SearchResults
         store.commit('setServerResults', [results, request ])
@@ -54,6 +35,30 @@ class SearchService {
         }
         store.commit('setServerError', message)
       })
+  }
+
+  private buildUrl(request: SearchRequest) {
+    switch (request.searchType) {
+      case 's':
+        let surl = '/api/search?q=' + request.searchText + '&first=' + request.first + '&count='
+          + request.pageCount + '&properties='
+          + request.properties + '&categories=keywords,tags,placename,date'
+        if (request.drilldown !== undefined && request.drilldown.length > 0) {
+          surl += '&drilldown=' + request.drilldown
+        }
+        return surl
+
+      case 'd':
+        let durl = '/api/by-day?month=' + request.month + '&day=' + request.day + '&first='
+          + request.first + '&count=' + request.pageCount + '&properties='
+          + request.properties + '&categories=keywords,tags,placename,year'
+        if (request.drilldown !== undefined && request.drilldown.length > 0) {
+          durl += '&drilldown=' + request.drilldown
+        }
+        return durl
+    }
+
+    throw new Error('Unhandled searchType: ' + request.searchType)
   }
 }
 
