@@ -26,17 +26,20 @@ export default class Search extends Vue {
 
 
   private invokeSearchService(query: any): void {
-      const searchRequest = searchRouteBuilder.toSearchRequest(query, this.searchType)
-      searchRequest.searchType = this.searchType
-      searchRequest.properties = this.queryProperties
-      searchService.search(searchRequest)
-      // this.typedText = this.resultsSearchText = searchRequest.searchText
+    const searchRequest = searchRouteBuilder.toSearchRequest(query, this.searchType)
+    searchRequest.searchType = this.searchType
+    searchRequest.properties = this.queryProperties
+    searchService.search(searchRequest)
+    // this.typedText = this.resultsSearchText = searchRequest.searchText
   }
 
   private mounted() {
+    console.log('mounted - search')
     const query = this.$route.query
     if ('q' in query || 't' in query) {
       this.invokeSearchService(query)
+    } else {
+      this.$store.commit('clearResults')
     }
   }
 

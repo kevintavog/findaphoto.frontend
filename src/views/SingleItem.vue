@@ -108,25 +108,21 @@ export default class SingleItem extends Vue {
 
   private displayer = dataDisplayer
   private searchItem: SearchItem = emptySearchItem
+  private errorMessage: string = ''
 
-  @Watch('results')
-  private onResultsChanged(to: any, from: any) {
-    if (this.results.totalMatches > 0) {
-      this.searchItem = this.results.groups[0].items[0]
-      console.log('searchItem updated')
-    }
-  }
 
   private get hasSearchItem(): boolean {
     return this.searchItem.id.length > 0
   }
 
-  private get results(): SearchResults {
-    return this.$store.state.serverResponse.results
+  private get hasError(): boolean {
+    return this.errorMessage.length > 0
   }
 
   private mounted() {
     this.searchItem.id = ''
+    this.errorMessage = ''
+
     const query = this.$route.query
     const searchRequest = new SearchRequest()
     searchRequest.searchType = 's'
@@ -137,7 +133,14 @@ export default class SingleItem extends Vue {
     // searchRequest.searchText = 'path:"' + query.id + '"'
     searchRequest.searchText = 'path:' + query.id
     searchRequest.drilldown = ''
-    searchService.search(searchRequest)
+    searchService.searchCallback(searchRequest, (results?: SearchResults, message?: string) => {
+      if (results && results.totalMatches > 0) {
+        this.searchItem = results.groups[0].items[0]
+      }
+      if (message) {
+        this.errorMessage = message
+      }
+    })
   }
 }
 </script>

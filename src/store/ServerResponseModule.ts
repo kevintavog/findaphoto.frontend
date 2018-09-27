@@ -29,6 +29,12 @@ export default class ServerResponseModule extends VuexModule {
     }
 
     @Mutation
+    public clearResults() {
+        this.errorMessage = undefined
+        this.results = undefined
+    }
+
+    @Mutation
     public setServerResults(data: [SearchResults, SearchRequest]) {
         this.errorMessage = undefined
         this.results = data[0]

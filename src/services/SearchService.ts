@@ -19,6 +19,17 @@ class SearchService {
     this.search(searchRequest)
   }
 
+  public searchCallback(request: SearchRequest, callback: (response?: SearchResults, errorMessage?: string) => void) {
+    axios.get(this.buildUrl(request))
+      .then((response) => {
+        const results = response.data as SearchResults
+        callback(results, undefined)
+      })
+      .catch((error) => {
+        callback(undefined, this.getErrorMessage(error))
+      })
+  }
+
   public search(request: SearchRequest) {
     store.commit('startSearch')
     store.commit('updateRequest', request)
@@ -28,13 +39,17 @@ class SearchService {
         store.commit('setServerResults', [results, request ])
       })
       .catch((error) => {
-        let message = error.toString()
-        if (error.response != null && error.response.data != null) {
-          const jsonError = error.response.data as FindAPhotoErrorResponse
-          message = jsonError.errorCode + ': ' + jsonError.errorMessage
-        }
-        store.commit('setServerError', message)
+        store.commit('setServerError', this.getErrorMessage(error))
       })
+  }
+
+  private getErrorMessage(error: any) {
+    let message = error.toString()
+    if (error.response != null && error.response.data != null) {
+      const jsonError = error.response.data as FindAPhotoErrorResponse
+      message = jsonError.errorCode + ': ' + jsonError.errorMessage
+    }
+    return message
   }
 
   private buildUrl(request: SearchRequest) {

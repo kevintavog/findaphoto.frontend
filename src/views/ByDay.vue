@@ -22,13 +22,14 @@ export default class ByDay extends Vue {
 
 
   private invokeSearchService(query: any): void {
-      const searchRequest = searchRouteBuilder.toSearchRequest(query, this.searchType)
-      searchRequest.searchType = this.searchType
-      searchRequest.properties = this.queryProperties
-      searchService.search(searchRequest)
+    const searchRequest = searchRouteBuilder.toSearchRequest(query, this.searchType)
+    searchRequest.searchType = this.searchType
+    searchRequest.properties = this.queryProperties
+    searchService.search(searchRequest)
   }
 
   private mounted() {
+    console.log('mounted - byday')
     this.invokeSearchService(this.$route.query)
   }
 
