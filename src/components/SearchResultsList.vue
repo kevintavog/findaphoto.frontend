@@ -21,7 +21,7 @@
       <div style="clear:both;"></div>
       <div class="group-outer-container">
         <div class="group-inner-container">
-          <div class="group-item-header"> {{group.name}} </div>
+          <div class="group-item-header"> {{groupName(group)}} </div>
 
           <div class="group-item-list">
             <div v-for="item in group.items" :key="item.id" class="group-item">
@@ -78,7 +78,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { SearchRequest } from '@/models/SearchRequest'
 import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 import { dataDisplayer } from '@/providers/DataDisplayerProvider'
-import { SearchResults } from '@/models/SearchResults'
+import { SearchGroup, SearchResults } from '@/models/SearchResults'
 import Paging from '@/components/Paging.vue'
 
 @Component({
@@ -86,11 +86,21 @@ import Paging from '@/components/Paging.vue'
     Paging,
   },
 })
+
 export default class SearchResultsList extends Vue {
+  private static days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+  @Prop() private dayInGroupName!: boolean
   private displayer = dataDisplayer
 
   private get isSearching(): boolean {
     return this.$store.state.serverResponse.isSearching
+  }
+
+  private groupName(group: SearchGroup): string {
+    if (this.dayInGroupName && group.items.length > 0) {
+      return group.name + ' - ' + SearchResultsList.days[new Date(group.items[0].createdDate).getDay()]
+    }
+    return group.name
   }
 
   private get results(): SearchResults {

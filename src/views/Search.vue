@@ -34,7 +34,6 @@ export default class Search extends Vue {
   }
 
   private mounted() {
-    console.log('mounted - search')
     const query = this.$route.query
     if ('q' in query || 't' in query) {
       this.invokeSearchService(query)
@@ -45,7 +44,6 @@ export default class Search extends Vue {
 
   @Watch('$route')
   private onRouteChanged(to: any, from: any) {
-    console.log('route changed - search')
     this.invokeSearchService(to.query)
   }
 }

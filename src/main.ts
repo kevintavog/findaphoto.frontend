@@ -3,7 +3,8 @@ import App from './App.vue'
 import router from './router'
 import store from '@/store/store'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faCalendar, faCamera, faCaretLeft, faCaretRight, faFastBackward, faFastForward, faFile, faFolder,
+import { faArrowLeft, faArrowRight, faCalendar, faCamera, faCaretLeft, faCaretRight,
+  faFastBackward, faFastForward, faFile, faFolder,
   faHome, faInfo, faLocationArrow, faMap, faMapMarker,
   faMapPin, faSearch, faServer, faTags } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,7 +13,8 @@ import 'blaze-css/dist/blaze.min.css'
 /* tslint:disable:no-var-requires */
 const fontawesome = require('@fortawesome/vue-fontawesome')
 
-library.add(faCalendar, faCamera, faCaretLeft, faCaretRight, faFastBackward, faFastForward, faFile, faFolder,
+library.add(faArrowLeft, faArrowRight, faCalendar, faCamera, faCaretLeft, faCaretRight,
+  faFastBackward, faFastForward, faFile, faFolder,
   faHome, faInfo, faLocationArrow, faMap, faMapMarker, faMapPin, faSearch, faServer, faTags)
 
 Vue.component('font-awesome-icon', fontawesome.FontAwesomeIcon)

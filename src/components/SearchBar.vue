@@ -1,7 +1,7 @@
 <template>
   <div class="searchbar c-input-group fp-horz-margins">
     <div class="o-field">        
-      <input class="c-field" placeholder="Enter search text" type="text" v-model="typedText" @keyup.enter="onSearch" >
+      <input class="c-field" placeholder="Enter search text" type="text" autocapitalize="none" v-model="typedText" @keyup.enter="onSearch" >
     </div>
     <button class="c-button c-button--info" type="submit" @click="onSearch" > <font-awesome-icon icon="search"/> Search</button>
   </div>
