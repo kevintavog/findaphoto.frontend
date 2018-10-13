@@ -6,7 +6,7 @@
       </div>
     </div>
     <ul class="navigation-group">
-      <li class="navigation-item"> <router-link to="/search"> <font-awesome-icon icon="home"/> Search </router-link> </li>
+      <li class="navigation-item"> <router-link to="/search"> <font-awesome-icon icon="home"/> Home </router-link> </li>
       <li class="navigation-item"> <router-link to="/byday"> <font-awesome-icon icon="calendar"/> By Day</router-link> </li>
       <li class="navigation-item"> <router-link to="/map"> <font-awesome-icon icon="map"/> Map</router-link> </li>
       <li class="navigation-item"> <router-link to="/about"> <font-awesome-icon icon="info"/> About</router-link> </li>
@@ -26,14 +26,22 @@ export default class App extends Vue {
 
 
 <style>
+.leaflet-fake-icon-image-2x {
+  background-image: url(../node_modules/leaflet/dist/images/marker-icon-2x.png);
+}
+.leaflet-fake-icon-shadow {
+  background-image: url(../node_modules/leaflet/dist/images/marker-shadow.png);
+}
+@import "../node_modules/leaflet/dist/leaflet.css";
+
 html {
-  height:100%;
+  height:100vh;
   margin:0;
 }
 
 body {
   background-color:#202020;
-  height:100%;
+  height:100vh;
   margin:0;
 }
 
@@ -49,6 +57,10 @@ a:visited{
 }
 
 #app {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -61,6 +73,7 @@ a:visited{
   padding: 0;
   z-index: 3;
   display: inline-flex;
+  flex-grow: 0;
 }
 
 .navigation-item {

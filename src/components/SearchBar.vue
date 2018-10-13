@@ -1,7 +1,7 @@
 <template>
   <div class="searchbar c-input-group fp-horz-margins">
     <div class="o-field">        
-      <input class="c-field" placeholder="Enter search text" type="text" autocapitalize="none" v-model="typedText" @keyup.enter="onSearch" >
+      <input class="c-field" placeholder="Enter search text" type="text" autocapitalize="none" v-model="typedText" @keyup.enter="onSearch" ref='searchInput' autofocus >
     </div>
     <button class="c-button c-button--info" type="submit" @click="onSearch" > <font-awesome-icon icon="search"/> Search</button>
   </div>
@@ -23,6 +23,10 @@ export default class SearchBar extends Vue {
 
   constructor() {
     super()
+  }
+
+  private mounted(): void {
+    this.$refs.searchInput.focus()
   }
 
   private onSearch(): void {
