@@ -88,7 +88,7 @@ import Paging from '@/components/Paging.vue'
 })
 
 export default class SearchResultsList extends Vue {
-  private static days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+  private static days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   @Prop() private dayInGroupName!: boolean
   private displayer = dataDisplayer
 
