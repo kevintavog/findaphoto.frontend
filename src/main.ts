@@ -11,6 +11,7 @@ import { faArrowLeft, faArrowRight, faCalendar, faCamera, faCaretLeft, faCaretRi
 import 'blaze-css/dist/blaze.min.css'
 
 /* tslint:disable:no-var-requires */
+declare function require(name: string): any
 const fontawesome = require('@fortawesome/vue-fontawesome')
 
 library.add(faArrowLeft, faArrowRight, faCalendar, faCamera, faCaretLeft, faCaretRight,
