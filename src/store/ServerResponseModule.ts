@@ -1,18 +1,15 @@
 import {Module, VuexModule, Mutation, Action} from 'vuex-module-decorators'
 import { SearchResults } from '@/models/SearchResults'
 import { SearchRequest } from '@/models/SearchRequest'
+import store from '@/store/store'
 
 @Module
 export default class ServerResponseModule extends VuexModule {
     public isSearching: boolean = false
-    public errorMessage?: string
     public results?: SearchResults
     public totalPages: number = 0
     public currentPage: number = 0
 
-    get hasError() {
-        return this.errorMessage !== undefined
-    }
 
     @Mutation
     public startSearch() {
@@ -21,7 +18,8 @@ export default class ServerResponseModule extends VuexModule {
 
     @Mutation
     public setServerError(message: string) {
-        this.errorMessage = message
+        store.commit('addErrorMessage', message)
+
         this.results = undefined
         this.totalPages = 0
         this.currentPage = 0
@@ -30,13 +28,13 @@ export default class ServerResponseModule extends VuexModule {
 
     @Mutation
     public clearResults() {
-        this.errorMessage = undefined
+        store.commit('clearErrorMessages')
         this.results = undefined
     }
 
     @Mutation
     public setServerResults(data: [SearchResults, SearchRequest]) {
-        this.errorMessage = undefined
+        store.commit('clearErrorMessages')
         this.results = data[0]
 
         this.totalPages = Math.ceil(data[0].totalMatches / data[1].pageCount)

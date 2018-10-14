@@ -1,9 +1,8 @@
 <template>
   <div id="app" class="fp-color-white">
-    <div id="error" v-if="this.$store.state.serverResponse.errorMessage !== undefined">
-      <div role="alert" class="c-alert c-alert--error">
-        Message: {{this.$store.state.serverResponse.errorMessage}}
-      </div>
+    <div v-for="err in errors" :key="err.id" role="alert" class="c-alert c-alert--error fp-error">
+      <button class="c-button c-button--close fp-error-button-close" @click='closeError(err)'>&times;</button>
+      Message: {{err.message}}
     </div>
     <ul class="navigation-group">
       <li class="navigation-item"> <router-link to="/search"> <font-awesome-icon icon="home"/> Home </router-link> </li>
@@ -18,9 +17,17 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
+import { ErrorMessageAndId } from '@/store/ErrorMessageModule'
 
 @Component({})
 export default class App extends Vue {
+    private closeError(err: ErrorMessageAndId): void {
+      this.$store.commit('closeErrorMessage', err)
+    }
+
+    private get errors(): ErrorMessageAndId[] {
+        return this.$store.state.errorMessages.messages.slice(0, 4)
+    }
 }
 </script>
 
@@ -44,7 +51,10 @@ body {
   height:100vh;
   margin:0;
 }
+</style>
 
+
+<style scoped>
 .fp-color-white {
   color: white;
 }
@@ -93,5 +103,12 @@ a:visited{
 }
 div a {
   text-decoration: none;
+}
+
+.c-alert.fp-error {
+  padding: 0.4em;
+}
+.c-button.c-button--close.fp-error-button-close {
+  margin-top: -0.25em;
 }
 </style>

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import serverResponse from './ServerResponseModule'
 import serverRequest from './ServerRequestModule'
+import errorMessages from './ErrorMessageModule'
 
 
 Vue.use(Vuex)
@@ -12,6 +13,7 @@ const store = new Vuex.Store({
   modules: {
     serverResponse,
     serverRequest,
+    errorMessages,
   },
 })
 
