@@ -37,6 +37,17 @@ export class SearchRouteBuilder {
             if ('d' in properties) {
                 searchRequest.day = +properties.d
             }
+        } else if (searchRequest.searchType === 'l') {
+            if ('lat' in properties && 'lon' in properties) {
+                searchRequest.latitude = +properties.lat
+                searchRequest.longitude = +properties.lon
+            }
+            if ('maxKm' in properties) {
+                searchRequest.maxKilometers = +properties.maxKm
+            }
+            if (searchRequest.maxKilometers <= 0) {
+                searchRequest.maxKilometers = 6
+            }
         }
 
         return searchRequest
@@ -63,6 +74,7 @@ export class SearchRouteBuilder {
             case 'l':
                 properties.lat = searchRequest.latitude.toString()
                 properties.lon = searchRequest.longitude.toString()
+                properties.maxKm = searchRequest.maxKilometers.toString()
                 break
             default:
                 throw new Error('Unknown search type: ' + searchRequest.searchType)

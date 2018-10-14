@@ -71,6 +71,18 @@ class SearchService {
           durl += '&drilldown=' + request.drilldown
         }
         return durl
+
+      case 'l':
+        let lurl = '/api/nearby?lat=' + request.latitude + '&lon=' + request.longitude + '&first='
+          + request.first + '&count=' + request.pageCount + '&properties='
+          + request.properties + '&categories=keywords,tags,date'
+        if (request.maxKilometers > 0) {
+          lurl += '&maxKilometers=' + request.maxKilometers
+        }
+        if (request.drilldown !== undefined && request.drilldown.length > 0) {
+          lurl += '&drilldown=' + request.drilldown
+        }
+        return lurl
     }
 
     throw new Error('Unhandled searchType: ' + request.searchType)

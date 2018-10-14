@@ -21,6 +21,7 @@ export interface SearchGroup {
 export interface SearchItem {
     city: string
     createdDate: Date
+    height: number,
     id: string
     imageName: string
     keywords: string[]
@@ -37,11 +38,13 @@ export interface SearchItem {
     warnings: string[]
     distanceKm: number
     tags: string[]
+    width: number,
 }
 
 export const emptySearchItem: SearchItem = {
     city: '',
     createdDate: new Date(),
+    height: 0,
     id: '',
     imageName: '',
     keywords: [],
@@ -58,6 +61,7 @@ export const emptySearchItem: SearchItem = {
     warnings: [],
     distanceKm: 0,
     tags: [],
+    width: 0,
 } as SearchItem
 
 
