@@ -7,12 +7,31 @@ interface DegreesMinutesSeconds {
 }
 
 export class DataDisplayerProvider {
+    public monthNames: string[] = [
+        'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
+        'October', 'November', 'December' ]
 
     public keywordsString(item: SearchItem): string {
         if (!item.keywords) {
             return ''
         }
         return item.keywords.join(', ')
+    }
+
+    public parentFolder(item: SearchItem): string {
+        const path = this.path(item)
+        const last = path.lastIndexOf('/')
+        if (last > 0) {
+            return path.slice(0, last)
+        }
+        return path
+    }
+
+    public path(item: SearchItem): string {
+        if (!item.path) {
+            return ''
+        }
+        return item.path.slice(2).split('\\').join('/')
     }
 
     public tagsString(item: SearchItem): string {

@@ -1,7 +1,26 @@
 import { SearchRequest } from '@/models/SearchRequest'
 import store from '@/store/store'
+import { dataDisplayer } from '@/providers/DataDisplayerProvider'
 
 export class SearchRouteBuilder {
+    public toReadableString(request: SearchRequest): string {
+        switch (request.searchType) {
+            case 's':
+                if (request.searchText.length === 0) {
+                    return 'for all items'
+                }
+
+                return 'for \'' + request.searchText + '\''
+            case 'd':
+                const activeDate = new Date(2016, request.month - 1, request.day, 0, 0, 0, 0)
+                return 'on ' + dataDisplayer.monthNames[activeDate.getMonth()] + ' ' + request.day
+            case 'l':
+                return 'near ' + dataDisplayer.latitudeDms(request.latitude)
+                    + ', ' + dataDisplayer.longitudeDms(request.longitude)
+            default:
+                return 'Unknown search type: ' + request.searchType
+        }
+    }
 
     public toSearchRequest(properties: any, defaultSearchType?: string) {
         return this.toSearchRequestFromProperties(properties as { [k: string]: string }, defaultSearchType)
@@ -13,6 +32,10 @@ export class SearchRouteBuilder {
         searchRequest.first = 1
         searchRequest.pageCount = store.state.serverRequest.request.pageCount
         searchRequest.properties = store.state.serverRequest.request.properties
+
+        if ('count' in properties) {
+            searchRequest.pageCount = +properties.count
+        }
 
         if ('t' in properties) {
             searchRequest.searchType = properties.t
@@ -59,6 +82,7 @@ export class SearchRouteBuilder {
             return properties
         }
 
+        properties.count = searchRequest.pageCount.toString()
         properties.t = searchRequest.searchType
         if (searchRequest.first > 1) {
             properties.p = Math.floor(1 + (searchRequest.first / searchRequest.pageCount)).toString()

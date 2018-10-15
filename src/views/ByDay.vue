@@ -21,6 +21,7 @@ import { searchService } from '@/services/SearchService'
 import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 import SearchResultsList from '@/components/SearchResultsList.vue'
 import { ByDayResult, SearchResults } from '@/models/SearchResults'
+import { dataDisplayer } from '@/providers/DataDisplayerProvider'
 
 @Component({
   components: {
@@ -28,9 +29,6 @@ import { ByDayResult, SearchResults } from '@/models/SearchResults'
   },
 })
 export default class ByDay extends Vue {
-  private static monthNames: string[] = [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-      'October', 'November', 'December' ]
   private searchType = 'd'
   private queryProperties: string = 'id,city,keywords,imageName,createdDate,latitude,longitude' +
     ',thumbUrl,slideUrl,warnings'
@@ -73,14 +71,14 @@ export default class ByDay extends Vue {
     if (!date) {
       return ''
     }
-    return ByDay.monthNames[date.getMonth()] + '  ' + date.getDate()
+    return dataDisplayer.monthNames[date.getMonth()] + '  ' + date.getDate()
   }
 
   private byDayStringFromByDayResult(byDay?: ByDayResult): string {
     if (!byDay) {
       return ''
     }
-    return ByDay.monthNames[byDay.month - 1] + '  ' + byDay.day
+    return dataDisplayer.monthNames[byDay.month - 1] + '  ' + byDay.day
   }
 
   @Watch('results')

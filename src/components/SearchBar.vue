@@ -26,7 +26,7 @@ export default class SearchBar extends Vue {
   }
 
   private mounted(): void {
-    this.$refs.searchInput.focus()
+    (this.$refs.searchInput as HTMLElement).focus()
   }
 
   private onSearch(): void {
