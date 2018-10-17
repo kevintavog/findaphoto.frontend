@@ -90,10 +90,10 @@ a:visited{
   text-decoration: none;
   cursor: pointer;
   display: block;
-  height: 3.5em;
-  padding: 0 1em;
+  height: 2.0em;
+  padding: 0 0.5em;
   color: inherit;
-  line-height: 3.5em;
+  line-height: 2.0em;
 }
 
 @media (max-width: 420px){

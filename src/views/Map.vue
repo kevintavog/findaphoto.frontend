@@ -5,21 +5,21 @@
           <font-awesome-icon icon="search"/>
       </button>
       <button v-if="!searchBarVisible" class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="toggleSearchBar">
-          <font-awesome-icon icon="search"/> Search
+          <font-awesome-icon icon="search"/>
       </button>
       <button class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="fitToMap">
-          <font-awesome-icon icon="vector-square"/> Fit map
+          <font-awesome-icon icon="vector-square"/> Fit
+      </button>
+      <button class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="searchCenterOfMap">
+          <font-awesome-icon icon="bullseye"/> Near center
       </button>
       <button class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="searchNearby">
           <font-awesome-icon icon="location-arrow"/> Nearby
       </button>
-      <button class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="searchCenterOfMap">
-          <font-awesome-icon icon="bullseye"/> Center of map
-      </button>
 
       <div v-if="!isLoading && totalMatches > 0">
           <div class="loaded-message">
-              {{totalMatches}} total items {{readableSearchString}}
+              {{totalMatches}} items {{readableSearchString}}
           </div>
       </div>
 
@@ -33,6 +33,7 @@
                 v-bind:style="{ 'width': percentageLoadedWidth }" class="c-progress__bar c-progress__bar--info" />
           </div>
       </div>
+      <div style="clear: both;" />
       <SearchBar v-if="searchBarVisible" :search-type="searchType" :query-properties="queryProperties" class="search-bar" />
 
     </div>
@@ -398,7 +399,7 @@ export default class Map extends Vue {
 .controls {
   text-align: left;
   padding-top: 0.4em;
-  padding-left: 1.0em;
+  padding-left: 0.3em;
   padding-right: 0.1em;
   padding-bottom: 0.3em;
 }
@@ -414,13 +415,11 @@ export default class Map extends Vue {
 
 .loading-message {
   float: left;
-  margin-left: 10px;
   margin-right: 10px;
 }
 
 .loaded-message {
   float: left;
-  margin-left: 10px;
   margin-right: 10px;
 }
 

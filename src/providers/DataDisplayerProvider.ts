@@ -104,7 +104,7 @@ export class DataDisplayerProvider {
     }
 
     public longitudeDms(longitude: number) {
-        return this.convertToDms(longitude, ['E', 'W'])
+        return this.convertToDms(longitude, ['E', 'W'], false)
     }
 
     public latDms(item: SearchItem) {
@@ -112,18 +112,19 @@ export class DataDisplayerProvider {
     }
 
     public latitudeDms(latitude: number) {
-        return this.convertToDms(latitude, ['N', 'S'])
+        return this.convertToDms(latitude, ['N', 'S'], false)
     }
 
 
-    public convertToDms(degrees: number, refValues: string[]): string {
+    public convertToDms(degrees: number, refValues: string[], includeDecimal: boolean): string {
         const dms = this.degreesToDms(degrees)
         let ref = refValues[0]
         if (dms.degrees < 0) {
             ref = refValues[1]
             dms.degrees *= -1
         }
-        return dms.degrees + '° ' + dms.minutes + '\' ' + dms.seconds.toFixed(2) + '\" ' + ref
+
+        return dms.degrees + '° ' + dms.minutes + '\' ' + dms.seconds.toFixed(includeDecimal ? 2 : 0) + '\" ' + ref
     }
 
     public degreesToDms(degrees: number): DegreesMinutesSeconds {
