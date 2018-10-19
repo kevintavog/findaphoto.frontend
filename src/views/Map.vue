@@ -34,7 +34,7 @@
           </div>
       </div>
       <div style="clear: both;" />
-      <SearchBar v-if="searchBarVisible" :search-type="searchType" :query-properties="queryProperties" class="search-bar" />
+      <SearchBar v-if="searchBarVisible" page="map" :search-type="searchType" :query-properties="queryProperties" class="search-bar" />
 
     </div>
 
@@ -140,6 +140,7 @@ export default class Map extends Vue {
         if (searchRequest.searchType === 'l'
             && searchRequest.latitude === -1
             && searchRequest.longitude === -1) {
+              console.log('no search to do - location with no lat/lon specified.')
               return
         }
 
@@ -425,7 +426,8 @@ export default class Map extends Vue {
 
 .search-bar {
   padding-top: 0.4em;
-  margin-left: -1.0em;
+  padding-bottom: 0.4em;
+  margin-left: -0.50em;
 }
 
 .content-container {

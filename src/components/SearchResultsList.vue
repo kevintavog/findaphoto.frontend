@@ -3,7 +3,7 @@
 
     <!-- The results header -->
     <h2 class="search-result-info" v-if="results.totalMatches == 0">
-      No matches were found for '{{resultsSearchText}}'
+      No matches were found for '{{request.searchText}}'
     </h2>
 
     <div class="search-result-info" v-if="results.totalMatches > 0 && pageCount == 1">
@@ -101,6 +101,10 @@ export default class SearchResultsList extends Vue {
       return group.name + ' - ' + SearchResultsList.days[new Date(group.items[0].createdDate).getDay()]
     }
     return group.name
+  }
+
+  private get request(): SearchRequest {
+    return this.$store.state.serverRequest.request
   }
 
   private get results(): SearchResults {

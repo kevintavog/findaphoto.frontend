@@ -5,9 +5,9 @@
       Message: {{err.message}}
     </div>
     <ul class="navigation-group">
-      <li class="navigation-item"> <router-link to="/search"> <font-awesome-icon icon="home"/> Home </router-link> </li>
-      <li class="navigation-item"> <router-link to="/byday"> <font-awesome-icon icon="calendar"/> By Day</router-link> </li>
-      <li class="navigation-item"> <router-link to="/map"> <font-awesome-icon icon="map"/> Map</router-link> </li>
+      <li class="navigation-item" @click="navigateToHome()"> <font-awesome-icon icon="home"/> Home </li>
+      <li class="navigation-item" @click="navigateToByDay()"> <font-awesome-icon icon="calendar"/> By Day </li>
+      <li class="navigation-item" @click="navigateToMap()"> <font-awesome-icon icon="map"/> Map </li>
       <li class="navigation-item"> <router-link to="/about"> <font-awesome-icon icon="info"/> About</router-link> </li>
     </ul>
     <router-view/>
@@ -18,9 +18,43 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { ErrorMessageAndId } from '@/store/ErrorMessageModule'
+import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 
 @Component({})
 export default class App extends Vue {
+    private navigateToHome() {
+        // If not on the home page and there's a text search, retain the text search
+        const searchRequest = this.$store.state.serverRequest.request
+        if (this.$route.name !== 'search'
+          && searchRequest.searchType === 's'
+          && searchRequest.searchText.length > 0) {
+
+            searchRequest.first = 1
+            this.$router.push({ path: '/search', query: searchRouteBuilder.toParameters(searchRequest) })
+
+        } else {
+            this.$router.push({ path: '/search' })
+        }
+    }
+
+    private navigateToByDay() {
+        console.log('byday:', this.$route.path, this.$route.name)
+        this.$router.push({ path: '/byday' })
+    }
+
+    private navigateToMap() {
+        // Retain a text search in order to put those on a map
+        const searchRequest = this.$store.state.serverRequest.request
+        if (searchRequest.searchType === 's'
+          && searchRequest.searchText.length > 0) {
+
+              searchRequest.first = 1
+              this.$router.push({ path: '/map', query: searchRouteBuilder.toParameters(searchRequest) })
+          } else {
+              this.$router.push({ path: '/map' })
+          }
+    }
+
     private closeError(err: ErrorMessageAndId): void {
       this.$store.commit('closeErrorMessage', err)
     }

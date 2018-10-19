@@ -1,6 +1,6 @@
 <template>
    <div class="search">
-    <SearchBar :search-type="searchType" :query-properties="queryProperties" />
+    <SearchBar page="search" :search-type="searchType" :query-properties="queryProperties" />
     <SearchResultsList />
   </div>
 </template>
@@ -30,7 +30,6 @@ export default class Search extends Vue {
     searchRequest.searchType = this.searchType
     searchRequest.properties = this.queryProperties
     searchService.search(searchRequest)
-    // this.typedText = this.resultsSearchText = searchRequest.searchText
   }
 
   private mounted() {
