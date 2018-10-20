@@ -8,20 +8,85 @@
       <li class="navigation-item" @click="navigateToHome()"> <font-awesome-icon icon="home"/> Home </li>
       <li class="navigation-item" @click="navigateToByDay()"> <font-awesome-icon icon="calendar"/> By Day </li>
       <li class="navigation-item" @click="navigateToMap()"> <font-awesome-icon icon="map"/> Map </li>
-      <li class="navigation-item"> <router-link to="/about"> <font-awesome-icon icon="info"/> About</router-link> </li>
+
+      <li class="navigation-item navigation-right" @click="toggleMenu()"> <font-awesome-icon icon="align-justify"/> </li>
     </ul>
     <router-view/>
+
+    <div v-if="menuOpen" class="drop-down-menu-container" >
+      <div aria-hidden class="c-overlay c-overlay--dismissible"></div>
+      <aside aria-label="main menu" aria-expanded class="o-drawer u-highest o-drawer--right o-drawer--visible main-menu-drawer">
+        <div class="c-card">
+          <button class="menu-close-button" @click="toggleMenu()">
+            <font-awesome-icon icon="times"/>
+          </button>
+          <div class="c-heading">
+            Find A Photo
+          </div>
+          <div class="c-card__body">
+            <ul class="main-menu-items-list">
+              <li class=""> <router-link to="/info"> <font-awesome-icon class="menu-icon" icon="info"/> Info </router-link> </li>
+              <li class=""> <router-link to="/example-searches"> <font-awesome-icon class="menu-icon" icon="search"/> Example searches </router-link> </li>
+              <li class=""> <router-link to="/field-values"> <font-awesome-icon class="menu-icon" icon="map-signs"/> Field values </router-link> </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+
   </div>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { ErrorMessageAndId } from '@/store/ErrorMessageModule'
 import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 
-@Component({})
+@Component({
+    metaInfo() {
+      return  {
+        title: '',
+        titleTemplate: (titleChunk) => {
+          return titleChunk ? `${titleChunk} - Find A Photo` : 'Find A Photo'
+        },
+      }
+    },
+})
 export default class App extends Vue {
+    private menuOpen = false
+
+    private created() {
+        window.addEventListener('mouseup', this.mouseUp)
+    }
+
+    private destroyed() {
+        window.addEventListener('mouseup', this.mouseUp)
+    }
+
+    private mouseUp(event: MouseEvent) {
+        if (this.menuOpen) {
+            if (event.target) {
+                const element = event.target! as HTMLElement
+                if (element.closest('.drop-down-menu-container')) {
+                    return
+                }
+            }
+            this.toggleMenu()
+        }
+    }
+
+    private toggleMenu() {
+        this.menuOpen = !this.menuOpen
+    }
+
+    @Watch('$route')
+    private onRouteChanged(to: any, from: any) {
+        if (this.menuOpen) {
+            this.toggleMenu()
+        }
+    }
+
     private navigateToHome() {
         // If not on the home page and there's a text search, retain the text search
         const searchRequest = this.$store.state.serverRequest.request
@@ -85,19 +150,20 @@ body {
   height:100vh;
   margin:0;
 }
-</style>
-
-
-<style scoped>
-.fp-color-white {
-  color: white;
-}
 
 a{
   color: white;
 }
 a:visited{
   color:white;
+}
+
+</style>
+
+
+<style scoped>
+.fp-color-white {
+  color: white;
 }
 
 #app {
@@ -111,23 +177,48 @@ a:visited{
 }
 
 .navigation-group {
-  background-color: #111;
+  background-color: #555;
   width: 100%;
   margin: 0;
   padding: 0;
-  z-index: 3;
-  display: inline-flex;
-  flex-grow: 0;
+  text-align: left;
 }
 
 .navigation-item {
-  text-decoration: none;
   cursor: pointer;
-  display: block;
+  display: inline-block;
   height: 2.0em;
-  padding: 0 0.5em;
-  color: inherit;
+  padding: 0 0.8em;
   line-height: 2.0em;
+}
+
+.navigation-right {
+  float: right;
+  margin-right: 0.5em;
+}
+
+.main-menu-drawer {
+  background-color: #666;
+}
+
+.main-menu-items-list {
+  text-align: left;
+  list-style-type: none;
+  line-height: 2.5em;
+}
+
+.menu-icon {
+  width: 1.3em;
+}
+
+.menu-close-button {
+  position: absolute;
+  right: 0.7em;
+  top: 0.3em;
+  background-color: #666;
+  border: none;
+  color: white;
+  font-size: 1.1em;
 }
 
 @media (max-width: 420px){

@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Search from './views/Search.vue'
+import Meta from 'vue-meta'
 
 Vue.use(Router)
+Vue.use(Meta)
 
 export default new Router({
   mode: 'history',
@@ -20,28 +22,30 @@ export default new Router({
     {
       path: '/byday',
       name: 'byday',
-      // this generates a separate chunk (about.[hash].js) for this route
+      // this generates a separate chunk (<component>.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('./views/ByDay.vue'),
     },
     {
       path: '/map',
       name: 'map',
-      // this generates a separate chunk (about.[hash].js) for this route
+      // this generates a separate chunk (<component>.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('./views/Map.vue'),
     },
     {
       path: '/singleitem',
       name: 'singleitem',
-      // this generates a separate chunk (about.[hash].js) for this route
+      // this generates a separate chunk (<component>.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('./views/SingleItem.vue'),
     },
     {
-      path: '/about',
-      name: 'about',
-      component: () => import('./views/About.vue'),
+      path: '/example-searches',
+      name: 'examplesearches',
+      // this generates a separate chunk (<component>.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('./views/ExampleSearches.vue'),
     },
   ],
   scrollBehavior(to, from, savedPosition) {

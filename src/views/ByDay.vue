@@ -27,6 +27,11 @@ import { dataDisplayer } from '@/providers/DataDisplayerProvider'
   components: {
     SearchResultsList,
   },
+  metaInfo() {
+    return  {
+      title: (this as ByDay).byDayTitle,
+    }
+  },
 })
 export default class ByDay extends Vue {
   private searchType = 'd'
@@ -36,11 +41,13 @@ export default class ByDay extends Vue {
   private previousDayText: string = ''
   private nextDayText: string = ''
   private dayAndMonth: string = ''
+  private byDayTitle = 'ByDay'
 
   private invokeSearchService(query: any): void {
     const searchRequest = searchRouteBuilder.toSearchRequest(query, this.searchType)
     searchRequest.properties = this.queryProperties
     searchService.search(searchRequest)
+    this.byDayTitle = this.byDayString(searchRequest.month - 1, searchRequest.day)
   }
 
   private navigateToDate(byDay: ByDayResult): void {
@@ -67,7 +74,11 @@ export default class ByDay extends Vue {
     return this.$store.state.serverResponse.results
   }
 
-  private byDayString(date?: Date): string {
+  private byDayString(month: number, day: number): string {
+    return dataDisplayer.monthNames[month] + '  ' + day
+  }
+
+  private byDayStringFromDate(date?: Date): string {
     if (!date) {
       return ''
     }
@@ -83,13 +94,11 @@ export default class ByDay extends Vue {
 
   @Watch('results')
   private onResultsChanged(to: any, from: any) {
-    this.activeDate = new Date(
-      2016,
-      this.$store.state.serverRequest.request.month - 1,
-      this.$store.state.serverRequest.request.day, 0, 0, 0, 0)
-    this.dayAndMonth = 'Pictures from ' + this.byDayString(this.activeDate)
     this.previousDayText = this.byDayStringFromByDayResult(this.results.previousAvailableByDay)
     this.nextDayText = this.byDayStringFromByDayResult(this.results.nextAvailableByDay)
+    this.dayAndMonth = 'Pictures from ' + this.byDayString(
+      this.$store.state.serverRequest.request.month - 1,
+      this.$store.state.serverRequest.request.day)
   }
 
   @Watch('$route')

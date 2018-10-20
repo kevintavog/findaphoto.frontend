@@ -18,11 +18,17 @@ import SearchResultsList from '@/components/SearchResultsList.vue'
     SearchBar,
     SearchResultsList,
   },
+  metaInfo() {
+    return  {
+      title: (this as Search).searchTitle,
+    }
+  },
 })
 export default class Search extends Vue {
   private searchType = 's'
   private queryProperties: string = 'id,city,keywords,imageName,createdDate,latitude,longitude' +
     ',thumbUrl,slideUrl,warnings'
+  private searchTitle = 'Search'
 
 
   private invokeSearchService(query: any): void {
@@ -30,6 +36,7 @@ export default class Search extends Vue {
     searchRequest.searchType = this.searchType
     searchRequest.properties = this.queryProperties
     searchService.search(searchRequest)
+    this.searchTitle = searchRequest.searchText
   }
 
   private mounted() {

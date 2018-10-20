@@ -110,6 +110,11 @@ import 'leaflet.markercluster'
   components: {
     SearchBar,
   },
+    metaInfo() {
+      return  {
+        title: 'Map',
+      }
+    },
 })
 export default class Map extends Vue {
     private static defaultMarkerWidthAndHeight = 50
@@ -224,7 +229,6 @@ export default class Map extends Vue {
     private onResultsChanged(to: any, from: any) {
         if (this.results) {
             this.totalMatches = this.results.totalMatches
-            let index = 0
             this.results.groups.forEach( (group) => {
                 group.items.forEach( (item) => {
                     if (item.latitude && item.longitude) {
@@ -336,7 +340,7 @@ export default class Map extends Vue {
 
     private createMarker(item: SearchItem, index: number) {
         const marker = L.marker([item.latitude, item.longitude], { icon: this.getDefaultThumbnailIcon(item) })
-        let opt = marker.options as any
+        const opt = marker.options as any
         opt.item = item
         marker.on('click', (evt) => {
             this.currentItemMarkerIndex = index
