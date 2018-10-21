@@ -41,11 +41,25 @@ export default new Router({
       component: () => import('./views/SingleItem.vue'),
     },
     {
+      path: '/info',
+      name: 'info',
+      // this generates a separate chunk (<component>.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('./views/Info.vue'),
+    },
+    {
       path: '/example-searches',
       name: 'examplesearches',
       // this generates a separate chunk (<component>.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import('./views/ExampleSearches.vue'),
+    },
+    {
+      path: '/field-values',
+      name: 'fieldvalues',
+      // this generates a separate chunk (<component>.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('./views/FieldValues.vue'),
     },
   ],
   scrollBehavior(to, from, savedPosition) {

@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+import errorMessages from './ErrorMessageModule'
+import fieldValues from './FieldValuesModules'
 import serverResponse from './ServerResponseModule'
 import serverRequest from './ServerRequestModule'
-import errorMessages from './ErrorMessageModule'
 
 
 Vue.use(Vuex)
@@ -11,9 +12,10 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {},
   modules: {
+    errorMessages,
+    fieldValues,
     serverResponse,
     serverRequest,
-    errorMessages,
   },
 })
 

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { FindAPhotoErrorResponse, SearchResults } from '@/models/SearchResults'
+import { FieldValuesIndexResponse, IndexResponse } from '@/models/IndexResponse'
 import store from '@/store/store'
 import { SearchRequest } from '@/models/SearchRequest'
 
@@ -40,6 +41,41 @@ class SearchService {
       })
       .catch((error) => {
         store.commit('setServerError', this.getErrorMessage(error))
+      })
+  }
+
+  public indexStats(properties: string, callback: (response?: IndexResponse) => void) {
+    axios.get('/api/index?properties=' + properties)
+      .then((response) => {
+        callback(response.data as IndexResponse)
+      })
+      .catch((error) => {
+        store.commit('setServerError', this.getErrorMessage(error))
+        callback(undefined)
+      })
+  }
+
+  public indexFieldValues(
+      fieldNames: string[],
+      callback: (response?: FieldValuesIndexResponse) => void,
+      query?: string,
+      maxCount?: number) {
+
+    let url = '/api/index/fieldvalues?fields=' + fieldNames.join(',')
+    if (maxCount) {
+      url += '&max=' + maxCount
+    }
+    if (query && query.length > 0) {
+      url += '&q=' + query;
+    }
+
+    axios.get(url)
+      .then((response) => {
+        callback(response.data as FieldValuesIndexResponse)
+      })
+      .catch((error) => {
+        store.commit('setServerError', this.getErrorMessage(error))
+        callback(undefined)
       })
   }
 
