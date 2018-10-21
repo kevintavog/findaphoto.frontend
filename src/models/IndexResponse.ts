@@ -38,3 +38,12 @@ export interface FieldNameAndValuesIndexResponse {
 export interface FieldValuesIndexResponse {
     fields: FieldNameAndValuesIndexResponse[]
 }
+
+export interface SourceNameValueIndexResponse {
+    name: string
+    value: string
+}
+
+export interface MediaIndexResponse {
+    sourceValues: SourceNameValueIndexResponse[]
+}

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { FindAPhotoErrorResponse, SearchResults } from '@/models/SearchResults'
-import { FieldValuesIndexResponse, IndexResponse } from '@/models/IndexResponse'
+import { FieldValuesIndexResponse, IndexResponse,
+  MediaIndexResponse, SourceNameValueIndexResponse } from '@/models/IndexResponse'
 import store from '@/store/store'
 import { SearchRequest } from '@/models/SearchRequest'
 
@@ -66,7 +67,7 @@ class SearchService {
       url += '&max=' + maxCount
     }
     if (query && query.length > 0) {
-      url += '&q=' + query;
+      url += '&q=' + query
     }
 
     axios.get(url)
@@ -77,6 +78,45 @@ class SearchService {
         store.commit('setServerError', this.getErrorMessage(error))
         callback(undefined)
       })
+  }
+
+  public mediaSource(id: string, callback: (response?: MediaIndexResponse) => void) {
+    axios.get('/api/media/' + id)
+      .then((response) => {
+        const values = this.objectToSourceNameValues(response.data as SourceNameValueIndexResponse[], '')
+        callback({ sourceValues: values})
+      })
+      .catch((error) => {
+        store.commit('setServerError', this.getErrorMessage(error))
+        callback(undefined)
+      })
+  }
+
+  private objectToSourceNameValues(obj: object, prefix: string): SourceNameValueIndexResponse[] {
+    const values = Array<SourceNameValueIndexResponse>()
+
+    for (const [key, value] of Object.entries(obj)) {
+      if (obj.hasOwnProperty(key)) {
+        const name = prefix + key
+        let snv: SourceNameValueIndexResponse = { name: '', value: '' }
+
+        if (typeof value === 'string' || typeof value === 'number') {
+            snv = { name, value: String(value) }
+        } else {
+            if (value instanceof Array) {
+                snv = { name, value: value.join(', ') }
+            } else {
+                values.push(...this.objectToSourceNameValues(value, name + '.'))
+            }
+        }
+
+        if (snv.name.length > 0) {
+            values.push(snv)
+        }
+      }
+    }
+
+    return values
   }
 
   private getErrorMessage(error: any) {

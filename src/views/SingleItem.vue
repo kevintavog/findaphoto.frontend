@@ -87,12 +87,41 @@
     <div v-if="searchItem.durationseconds" class="camera-and-media-info-item">Video duration: {{searchItem.durationseconds}} seconds</div>
   </div>
 
+  <br>
+  <div v-if="showMediaSource" class="c-text media-source-header" >
+      <div @click="toggleShowMediaSource()" class="media-source-clickable">
+          <font-awesome-icon icon="cogs" size="2x" />
+          <div class="media-source-message"> Full document source </div>
+          <font-awesome-icon icon="caret-down" size="2x" />
+      </div>
+
+      <div class="o-container o-container--large">
+          <div class="o-grid c-text media-source-table-header" >
+              <div class="o-grid__cell--width-20 media-source-name"> Field name </div>
+              <div class="o-grid__cell media-source-value">Value</div>
+          </div>
+          <div v-for="nv in mediaSource.sourceValues" :key="nv.name" class="o-grid c-text media-source media-source-row" >
+              <div class="o-grid__cell--width-20 media-source-name"> {{nv.name}} </div>
+              <div class="o-grid__cell media-source-value ">{{nv.value}}</div>
+          </div>
+      </div>
+  </div>
+  <div v-else class="c-text media-source-header" >
+      <div @click="toggleShowMediaSource()" class="media-source-clickable">
+          <font-awesome-icon icon="cogs" size="2x"/>
+          <div class="media-source-message"> Full document source </div>
+          <font-awesome-icon icon="caret-right" size="2x"/>
+      </div>
+  </div>
+
+
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { emptySearchItem, SearchItem, SearchResults } from '@/models/SearchResults'
+import { MediaIndexResponse } from '@/models/IndexResponse'
 import { SearchRequest } from '@/models/SearchRequest'
 import { dataDisplayer } from '@/providers/DataDisplayerProvider'
 import { searchService } from '@/services/SearchService'
@@ -109,6 +138,8 @@ export default class SingleItem extends Vue {
   private displayer = dataDisplayer
   private searchItem: SearchItem = emptySearchItem
   private errorMessage: string = ''
+  private showMediaSource = false
+  private mediaSource: MediaIndexResponse = { sourceValues: [] }
 
 
   private get hasSearchItem(): boolean {
@@ -117,6 +148,10 @@ export default class SingleItem extends Vue {
 
   private get hasError(): boolean {
     return this.errorMessage.length > 0
+  }
+
+  private toggleShowMediaSource() {
+    this.showMediaSource = !this.showMediaSource
   }
 
   private mounted() {
@@ -130,17 +165,26 @@ export default class SingleItem extends Vue {
       ',' + SingleItem.ImageProperties
     searchRequest.first = 1
     searchRequest.pageCount = 1
-    // searchRequest.searchText = 'path:"' + query.id + '"'
     searchRequest.searchText = 'path:' + query.id
     searchRequest.drilldown = ''
     searchService.searchCallback(searchRequest, (results?: SearchResults, message?: string) => {
       if (results && results.totalMatches > 0) {
         this.searchItem = results.groups[0].items[0]
+        this.getMediaSource()
       }
       if (message) {
         this.errorMessage = message
       }
     })
+  }
+
+  private getMediaSource() {
+    searchService.mediaSource(encodeURI(this.searchItem.id), (results?: MediaIndexResponse) => {
+      if (results) {
+        this.mediaSource = results!
+      }
+    })
+
   }
 }
 </script>
@@ -192,6 +236,41 @@ export default class SingleItem extends Vue {
   text-align: left;
 }
 .camera-and-media-info-item {
+  display: inline;
+}
+
+.media-source-header {
+  text-align: left;
+  margin-left: 10px;
+  color: white;
+  background-color: #34495E;
+}
+.media-source-clickable {
+  margin-left: 1em;
+  cursor: pointer;
+}
+.media-source {
+  color: white;
+}
+.media-source-table-header {
+  color: yellow;
+  background-color:#14395E;
+  cursor: auto;
+}
+.media-source-message {
+  display: inline;
+  font-size: 1.9em;
+}
+.media-source-row:nth-child(odd) {
+  background: #14395E;
+}
+.media-source-name {
+  margin-left: 5px;
+  display: inline;
+  padding-left: 10px;
+}
+.media-source-value {
+  margin-right: 5px;
   display: inline;
 }
 

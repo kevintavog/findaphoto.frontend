@@ -23,9 +23,9 @@ export default class FieldValuesModule extends VuexModule {
             (results?: FieldValuesIndexResponse) => {
                 if (results) {
                     let fieldValues: string[] = []
-                    for (const fv of results!.fields) {
-                        if (fv.name === fieldName) {
-                            fieldValues = fv.values.map( (fc) => fc.value )
+                    for (const f of results!.fields) {
+                        if (f.name === fieldName) {
+                            fieldValues = f.values.map( (fc) => fc.value )
                         }
                     }
                     const fv = { name: fieldName, values: fieldValues }
