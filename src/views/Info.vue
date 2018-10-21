@@ -1,5 +1,5 @@
 <template>
-  <div class="info-searches">
+  <div class="info">
     <h2 v-if="loading">
        Loading...
     </h2>
@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <div v-if="fieldAndValues" class="field-values-container"  >
+    <div v-if="fieldAndValues.name.length > 0" class="field-values-container"  >
       <div v-if="fieldAndValues.values">
         <h3> 
           <font-awesome-icon class="info-icon" icon="list"/>

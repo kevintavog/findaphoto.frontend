@@ -1,5 +1,5 @@
 <template>
-  <div class="searchresults" v-if="results && isSearching === false">
+  <div class="searchresults" v-if="hasResults && isSearching === false">
 
     <!-- The results header -->
     <h2 class="search-result-info" v-if="results.totalMatches == 0">
@@ -105,6 +105,10 @@ export default class SearchResultsList extends Vue {
 
   private get request(): SearchRequest {
     return this.$store.state.serverRequest.request
+  }
+
+  private get hasResults(): boolean {
+    return this.$store.state.serverResponse.hasResults
   }
 
   private get results(): SearchResults {

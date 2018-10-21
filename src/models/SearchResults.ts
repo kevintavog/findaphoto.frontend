@@ -3,8 +3,8 @@ export interface SearchResults {
     resultCount: number
     groups: SearchGroup[]
     categories: SearchCategory[]
-    previousAvailableByDay: ByDayResult
-    nextAvailableByDay: ByDayResult
+    previousAvailableByDay?: ByDayResult
+    nextAvailableByDay?: ByDayResult
 }
 
 export interface ByDayResult {

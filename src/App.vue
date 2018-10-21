@@ -103,7 +103,6 @@ export default class App extends Vue {
     }
 
     private navigateToByDay() {
-        console.log('byday:', this.$route.path, this.$route.name)
         this.$router.push({ path: '/byday' })
     }
 

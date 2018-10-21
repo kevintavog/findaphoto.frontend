@@ -63,11 +63,11 @@ export default class ByDay extends Vue {
   }
 
   private onPreviousDay() {
-    this.navigateToDate(this.results.previousAvailableByDay)
+    this.navigateToDate(this.results.previousAvailableByDay!)
   }
 
   private onNextDay() {
-    this.navigateToDate(this.results.nextAvailableByDay)
+    this.navigateToDate(this.results.nextAvailableByDay!)
   }
 
   private get results(): SearchResults {

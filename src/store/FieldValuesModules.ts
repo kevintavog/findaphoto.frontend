@@ -1,6 +1,6 @@
-import { Module, VuexModule, Mutation, MutationAction } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
 import { FieldValuesIndexResponse, IndexResponse } from '@/models/IndexResponse'
-import { FieldNameWithValues } from '@/models/FieldNameWithValues'
+import { FieldNameWithValues, QueryMultipleFields } from '@/models/FieldNameWithValues'
 import { searchService } from '@/services/SearchService'
 import store from '@/store/store'
 
@@ -8,13 +8,15 @@ import store from '@/store/store'
 @Module
 export default class FieldValuesModule extends VuexModule {
     public allFields: string[] = []
-    public fieldAndValues?: FieldNameWithValues
+    public fieldAndValues: FieldNameWithValues = { name: '', values: undefined }
+    public multipleFieldAndValues: FieldValuesIndexResponse = { fields: []}
 
     private initialized = false
 
     @Mutation
     public getFieldValues(fieldName: string) {
-        this.fieldAndValues = undefined
+        this.fieldAndValues.name = ''
+        this.fieldAndValues.values = undefined
 
         searchService.indexFieldValues(
             [fieldName],
@@ -30,6 +32,20 @@ export default class FieldValuesModule extends VuexModule {
                     store.commit('setFieldValues', fv)
                 }
             })
+    }
+
+    @Mutation
+    public getMultipleFieldValues(query: QueryMultipleFields) {
+        this.multipleFieldAndValues.fields = []
+        searchService.indexFieldValues(
+            query.fieldNames,
+            (results?: FieldValuesIndexResponse) => {
+                if (results) {
+                    store.commit('setMultipleFieldValues', results)
+                }
+            },
+            query.searchText,
+            query.maxCount)
     }
 
     @Mutation
@@ -49,5 +65,10 @@ export default class FieldValuesModule extends VuexModule {
     @Mutation
     private setFieldValues(fv: FieldNameWithValues) {
         this.fieldAndValues = fv
+    }
+
+    @Mutation
+    private setMultipleFieldValues(fv: FieldValuesIndexResponse) {
+        this.multipleFieldAndValues = fv
     }
 }
