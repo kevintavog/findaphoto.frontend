@@ -27,7 +27,7 @@
             <ul class="main-menu-items-list">
               <li class=""> <router-link to="/info"> <font-awesome-icon class="menu-icon" icon="info"/> Info </router-link> </li>
               <li class=""> <router-link to="/example-searches"> <font-awesome-icon class="menu-icon" icon="search"/> Example searches </router-link> </li>
-              <li class=""> <router-link to="/field-values"> <font-awesome-icon class="menu-icon" icon="map-signs"/> Field values </router-link> </li>
+              <li class="" @click="navigateToFieldValues()"> <font-awesome-icon class="menu-icon" icon="map-signs"/> Field values </li>
             </ul>
           </div>
         </div>
@@ -39,90 +39,102 @@
 
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
-import { ErrorMessageAndId } from "@/store/ErrorMessageModule";
-import { searchRouteBuilder } from "@/providers/SearchRouteBuilder";
+import { Component, Vue, Watch } from "vue-property-decorator"
+import { ErrorMessageAndId } from "@/store/ErrorMessageModule"
+import { searchRouteBuilder } from "@/providers/SearchRouteBuilder"
 
 @Component({
   metaInfo() {
     return {
       title: "",
       titleTemplate: titleChunk => {
-        return titleChunk ? `${titleChunk} - Find A Photo` : "Find A Photo";
+        return titleChunk ? `${titleChunk} - Find A Photo` : "Find A Photo"
       }
-    };
+    }
   }
 })
 export default class App extends Vue {
-  private menuOpen = false;
+  private menuOpen = false
 
   private created() {
-    window.addEventListener("mouseup", this.mouseUp);
+    window.addEventListener("mouseup", this.mouseUp)
   }
 
   private destroyed() {
-    window.addEventListener("mouseup", this.mouseUp);
+    window.addEventListener("mouseup", this.mouseUp)
   }
 
   private mouseUp(event: MouseEvent) {
     if (this.menuOpen) {
       if (event.target) {
-        const element = event.target! as HTMLElement;
+        const element = event.target! as HTMLElement
         if (element.closest(".drop-down-menu-container")) {
-          return;
+          return
         }
       }
-      this.toggleMenu();
+      this.toggleMenu()
     }
   }
 
   private toggleMenu() {
-    this.menuOpen = !this.menuOpen;
+    this.menuOpen = !this.menuOpen
   }
 
   @Watch("$route")
   private onRouteChanged(to: any, from: any) {
     if (this.menuOpen) {
-      this.toggleMenu();
+      this.toggleMenu()
     }
   }
 
   private navigateToHome() {
     // If not on the home page and there's a text search, retain the text search
-    const searchRequest = this.$store.state.serverRequest.request;
+    const searchRequest = this.$store.state.serverRequest.request
     if (this.$route.name !== "search" && searchRequest.searchType.length > 0 && searchRequest.searchType !== 'd') {
       this.$router.push({
         path: "/search",
         query: searchRouteBuilder.toPrimaryParameters(searchRequest)
-      });
+      })
     } else {
-      this.$router.push({ path: "/search" });
+      this.$router.push({ path: "/search" })
     }
   }
 
   private navigateToByDay() {
-    this.$router.push({ path: "/byday" });
+    this.$router.push({ path: "/byday" })
   }
 
   private navigateToMap() {
     // Retain the current search in order to put those on a map
-    const searchRequest = this.$store.state.serverRequest.request;
+    const searchRequest = this.$store.state.serverRequest.request
     if (searchRequest.searchType.length > 0) {
       this.$router.push({
         path: "/map",
         query: searchRouteBuilder.toPrimaryParameters(searchRequest)
-      });
+      })
     } else {
-      this.$router.push({ path: "/map" });
+      this.$router.push({ path: "/map" })
+    }
+  }
+
+  private navigateToFieldValues() {
+    const searchRequest = this.$store.state.serverRequest.request
+    if (searchRequest.searchType.length > 0) {
+      this.$router.push({
+        path: "/field-values",
+        query: searchRouteBuilder.toPrimaryParameters(searchRequest)
+      })
+    } else {
+      this.$router.push({ path: "/field-values" })
     }
   }
 
   private closeError(err: ErrorMessageAndId): void {
-    this.$store.commit("closeErrorMessage", err);
+    this.$store.commit("closeErrorMessage", err)
   }
 
   private get errors(): ErrorMessageAndId[] {
-    return this.$store.state.errorMessages.messages.slice(0, 4);
+    return this.$store.state.errorMessages.messages.slice(0, 4)
   }
 }
 </script>
