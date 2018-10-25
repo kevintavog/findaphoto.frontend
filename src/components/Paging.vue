@@ -68,6 +68,9 @@ export default class Paging extends Vue {
       case 'd':
         page = 'byday'
         break
+      case 'l':
+        page = 'search'
+        break
       default:
         throw new Error('Unhandled searchType: ' + searchRequest.searchType)
     }
