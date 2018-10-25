@@ -39,93 +39,91 @@
 
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { ErrorMessageAndId } from '@/store/ErrorMessageModule'
-import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
+import { Component, Vue, Watch } from "vue-property-decorator";
+import { ErrorMessageAndId } from "@/store/ErrorMessageModule";
+import { searchRouteBuilder } from "@/providers/SearchRouteBuilder";
 
 @Component({
-    metaInfo() {
-      return  {
-        title: '',
-        titleTemplate: (titleChunk) => {
-          return titleChunk ? `${titleChunk} - Find A Photo` : 'Find A Photo'
-        },
+  metaInfo() {
+    return {
+      title: "",
+      titleTemplate: titleChunk => {
+        return titleChunk ? `${titleChunk} - Find A Photo` : "Find A Photo";
       }
-    },
+    };
+  }
 })
 export default class App extends Vue {
-    private menuOpen = false
+  private menuOpen = false;
 
-    private created() {
-        window.addEventListener('mouseup', this.mouseUp)
-    }
+  private created() {
+    window.addEventListener("mouseup", this.mouseUp);
+  }
 
-    private destroyed() {
-        window.addEventListener('mouseup', this.mouseUp)
-    }
+  private destroyed() {
+    window.addEventListener("mouseup", this.mouseUp);
+  }
 
-    private mouseUp(event: MouseEvent) {
-        if (this.menuOpen) {
-            if (event.target) {
-                const element = event.target! as HTMLElement
-                if (element.closest('.drop-down-menu-container')) {
-                    return
-                }
-            }
-            this.toggleMenu()
+  private mouseUp(event: MouseEvent) {
+    if (this.menuOpen) {
+      if (event.target) {
+        const element = event.target! as HTMLElement;
+        if (element.closest(".drop-down-menu-container")) {
+          return;
         }
+      }
+      this.toggleMenu();
     }
+  }
 
-    private toggleMenu() {
-        this.menuOpen = !this.menuOpen
+  private toggleMenu() {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  @Watch("$route")
+  private onRouteChanged(to: any, from: any) {
+    if (this.menuOpen) {
+      this.toggleMenu();
     }
+  }
 
-    @Watch('$route')
-    private onRouteChanged(to: any, from: any) {
-        if (this.menuOpen) {
-            this.toggleMenu()
-        }
+  private navigateToHome() {
+    // If not on the home page and there's a text search, retain the text search
+    const searchRequest = this.$store.state.serverRequest.request;
+    if (this.$route.name !== "search" && searchRequest.searchType.length > 0 && searchRequest.searchType !== 'd') {
+      this.$router.push({
+        path: "/search",
+        query: searchRouteBuilder.toPrimaryParameters(searchRequest)
+      });
+    } else {
+      this.$router.push({ path: "/search" });
     }
+  }
 
-    private navigateToHome() {
-        // If not on the home page and there's a text search, retain the text search
-        const searchRequest = this.$store.state.serverRequest.request
-        if (this.$route.name !== 'search'
-          && searchRequest.searchType === 's'
-          && searchRequest.searchText.length > 0) {
+  private navigateToByDay() {
+    this.$router.push({ path: "/byday" });
+  }
 
-            searchRequest.first = 1
-            this.$router.push({ path: '/search', query: searchRouteBuilder.toParameters(searchRequest) })
-
-        } else {
-            this.$router.push({ path: '/search' })
-        }
+  private navigateToMap() {
+    // Retain the current search in order to put those on a map
+    const searchRequest = this.$store.state.serverRequest.request;
+    if (searchRequest.searchType.length > 0) {
+      this.$router.push({
+        path: "/map",
+        query: searchRouteBuilder.toPrimaryParameters(searchRequest)
+      });
+    } else {
+      this.$router.push({ path: "/map" });
     }
+  }
 
-    private navigateToByDay() {
-        this.$router.push({ path: '/byday' })
-    }
+  private closeError(err: ErrorMessageAndId): void {
+    this.$store.commit("closeErrorMessage", err);
+  }
 
-    private navigateToMap() {
-        // Retain a text search in order to put those on a map
-        const searchRequest = this.$store.state.serverRequest.request
-        if (searchRequest.searchType === 's'
-          && searchRequest.searchText.length > 0) {
-
-              searchRequest.first = 1
-              this.$router.push({ path: '/map', query: searchRouteBuilder.toParameters(searchRequest) })
-          } else {
-              this.$router.push({ path: '/map' })
-          }
-    }
-
-    private closeError(err: ErrorMessageAndId): void {
-      this.$store.commit('closeErrorMessage', err)
-    }
-
-    private get errors(): ErrorMessageAndId[] {
-        return this.$store.state.errorMessages.messages.slice(0, 4)
-    }
+  private get errors(): ErrorMessageAndId[] {
+    return this.$store.state.errorMessages.messages.slice(0, 4);
+  }
 }
 </script>
 
@@ -140,23 +138,22 @@ export default class App extends Vue {
 @import "../node_modules/leaflet/dist/leaflet.css";
 
 html {
-  height:100vh;
-  margin:0;
+  height: 100vh;
+  margin: 0;
 }
 
 body {
-  background-color:#202020;
-  height:100vh;
-  margin:0;
+  background-color: #202020;
+  height: 100vh;
+  margin: 0;
 }
 
-a{
+a {
   color: white;
 }
-a:visited{
-  color:white;
+a:visited {
+  color: white;
 }
-
 </style>
 
 
@@ -186,9 +183,9 @@ a:visited{
 .navigation-item {
   cursor: pointer;
   display: inline-block;
-  height: 2.0em;
+  height: 2em;
   padding: 0 0.8em;
-  line-height: 2.0em;
+  line-height: 2em;
 }
 
 .navigation-right {
@@ -220,7 +217,7 @@ a:visited{
   font-size: 1.1em;
 }
 
-@media (max-width: 420px){
+@media (max-width: 420px) {
   .navigation-item {
     padding: 0 0 0 7px;
   }

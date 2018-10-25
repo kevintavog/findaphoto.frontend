@@ -76,17 +76,14 @@ export class SearchRouteBuilder {
         return searchRequest
     }
 
-    public toParameters(searchRequest: SearchRequest) {
+    // Include only the general search parameters. Use 'toParameters' to include all parameters
+    public toPrimaryParameters(searchRequest: SearchRequest) {
         const properties: { [k: string]: string } = {}
         if (searchRequest == null) {
             return properties
         }
 
-        properties.count = searchRequest.pageCount.toString()
         properties.t = searchRequest.searchType
-        if (searchRequest.first > 1) {
-            properties.p = Math.floor(1 + (searchRequest.first / searchRequest.pageCount)).toString()
-        }
         switch (searchRequest.searchType) {
             case 's':
                 properties.q = searchRequest.searchText
@@ -102,6 +99,21 @@ export class SearchRouteBuilder {
                 break
             default:
                 throw new Error('Unknown search type: ' + searchRequest.searchType)
+        }
+
+        return properties
+    }
+
+    public toParameters(searchRequest: SearchRequest) {
+        const properties = this.toPrimaryParameters(searchRequest)
+        if (searchRequest == null) {
+            return properties
+        }
+
+        properties.count = searchRequest.pageCount.toString()
+        properties.t = searchRequest.searchType
+        if (searchRequest.first > 1) {
+            properties.p = Math.floor(1 + (searchRequest.first / searchRequest.pageCount)).toString()
         }
 
         if (searchRequest.drilldown && searchRequest.drilldown.length > 0) {

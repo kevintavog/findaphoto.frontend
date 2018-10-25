@@ -153,7 +153,7 @@ class SearchService {
         return surl
 
       case 'd':
-        let durl = '/api/by-day?=' + this.buildQueryParams(request) + '&first='
+        let durl = '/api/by-day?' + this.buildQueryParams(request) + '&first='
           + request.first + '&count=' + request.pageCount + '&properties='
           + request.properties + '&categories=keywords,tags,placename,year'
         if (request.drilldown !== undefined && request.drilldown.length > 0) {
