@@ -11,7 +11,7 @@
       <font-awesome-icon icon="arrow-right"/>
     </button>
     <div style="clear:both;"></div>
-    <SearchResultsList :day-in-group-name="true" />
+    <SearchResultsList :day-in-group-name="true"  :hide-search-description="true" />
   </div>
 </template>
 

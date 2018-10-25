@@ -2,9 +2,14 @@
   <div class="searchresults" v-if="hasResults && isSearching === false">
 
     <!-- The results header -->
-    <h2 class="search-result-info" v-if="results.totalMatches == 0">
+    <h2 v-if="results.totalMatches == 0" class="search-result-info" >
       No matches were found for '{{request.searchText}}'
     </h2>
+    <div v-else>
+      <div v-if="hideSearchDescription !== true" class="search-description" >
+        Results {{searchDescription}}
+      </div>
+    </div>
 
     <div class="search-result-info" v-if="results.totalMatches > 0 && pageCount == 1">
       Showing all {{results.totalMatches}} items
@@ -90,6 +95,7 @@ import Paging from '@/components/Paging.vue'
 export default class SearchResultsList extends Vue {
   private static days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
   @Prop() private dayInGroupName!: boolean
+  @Prop() private hideSearchDescription!: boolean
   private displayer = dataDisplayer
 
   private get isSearching(): boolean {
@@ -101,6 +107,10 @@ export default class SearchResultsList extends Vue {
       return group.name + ' - ' + SearchResultsList.days[new Date(group.items[0].createdDate).getDay()]
     }
     return group.name
+  }
+
+  private get searchDescription(): string {
+    return searchRouteBuilder.toReadableString(this.request)
   }
 
   private get request(): SearchRequest {
@@ -126,6 +136,13 @@ export default class SearchResultsList extends Vue {
 </script>
 
 <style scoped>
+
+.search-description {
+  font-size: 1.5em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
 .search-result-info {
   text-align: center;
 }

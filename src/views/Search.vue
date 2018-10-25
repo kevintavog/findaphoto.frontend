@@ -33,7 +33,6 @@ export default class Search extends Vue {
 
   private invokeSearchService(query: any): void {
     const searchRequest = searchRouteBuilder.toSearchRequest(query, this.searchType)
-    searchRequest.searchType = this.searchType
     searchRequest.properties = this.queryProperties
     searchService.search(searchRequest)
     this.searchTitle = searchRequest.searchText
