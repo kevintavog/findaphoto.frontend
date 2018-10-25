@@ -22,7 +22,7 @@ class SearchService {
   }
 
   public searchCallback(request: SearchRequest, callback: (response?: SearchResults, errorMessage?: string) => void) {
-    axios.get(this.buildUrl(request))
+    axios.get(this.buildSearchUrl(request))
       .then((response) => {
         const results = response.data as SearchResults
         callback(results, undefined)
@@ -35,7 +35,7 @@ class SearchService {
   public search(request: SearchRequest) {
     store.commit('startSearch')
     store.commit('updateRequest', request)
-    axios.get(this.buildUrl(request))
+    axios.get(this.buildSearchUrl(request))
       .then((response) => {
         const results = response.data as SearchResults
         store.commit('setServerResults', [results, request ])
@@ -59,15 +59,15 @@ class SearchService {
   public indexFieldValues(
       fieldNames: string[],
       callback: (response?: FieldValuesIndexResponse) => void,
-      query?: string,
+      request?: SearchRequest,
       maxCount?: number) {
 
     let url = '/api/index/fieldvalues?fields=' + fieldNames.join(',')
     if (maxCount) {
       url += '&max=' + maxCount
     }
-    if (query && query.length > 0) {
-      url += '&q=' + query
+    if (request) {
+      url += '&' + this.buildQueryParams(request)
     }
 
     axios.get(url)
@@ -128,10 +128,23 @@ class SearchService {
     return message
   }
 
-  private buildUrl(request: SearchRequest) {
+  private buildQueryParams(request: SearchRequest) {
     switch (request.searchType) {
       case 's':
-        let surl = '/api/search?q=' + request.searchText + '&first=' + request.first + '&count='
+        return 'q=' + request.searchText
+      case 'd':
+        return 'month=' + request.month + '&day=' + request.day
+      case 'l':
+        return 'lat=' + request.latitude + '&lon=' + request.longitude
+    }
+
+    throw new Error('Unhandled searchType: ' + request.searchType)
+  }
+
+  private buildSearchUrl(request: SearchRequest) {
+    switch (request.searchType) {
+      case 's':
+        let surl = '/api/search?' + this.buildQueryParams(request) + '&first=' + request.first + '&count='
           + request.pageCount + '&properties='
           + request.properties + '&categories=keywords,tags,placename,date'
         if (request.drilldown !== undefined && request.drilldown.length > 0) {
@@ -140,7 +153,7 @@ class SearchService {
         return surl
 
       case 'd':
-        let durl = '/api/by-day?month=' + request.month + '&day=' + request.day + '&first='
+        let durl = '/api/by-day?=' + this.buildQueryParams(request) + '&first='
           + request.first + '&count=' + request.pageCount + '&properties='
           + request.properties + '&categories=keywords,tags,placename,year'
         if (request.drilldown !== undefined && request.drilldown.length > 0) {
@@ -149,7 +162,7 @@ class SearchService {
         return durl
 
       case 'l':
-        let lurl = '/api/nearby?lat=' + request.latitude + '&lon=' + request.longitude + '&first='
+        let lurl = '/api/nearby?' + this.buildQueryParams(request) + '&first='
           + request.first + '&count=' + request.pageCount + '&properties='
           + request.properties + '&categories=keywords,tags,date'
         if (request.maxKilometers > 0) {

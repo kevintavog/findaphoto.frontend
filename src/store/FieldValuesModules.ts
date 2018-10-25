@@ -44,7 +44,7 @@ export default class FieldValuesModule extends VuexModule {
                     store.commit('setMultipleFieldValues', results)
                 }
             },
-            query.searchText,
+            query.request,
             query.maxCount)
     }
 

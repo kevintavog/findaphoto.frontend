@@ -1,3 +1,5 @@
+import { SearchRequest } from '@/models/SearchRequest'
+
 export interface FieldNameWithValues {
     name: string
     values?: string[]
@@ -5,6 +7,6 @@ export interface FieldNameWithValues {
 
 export interface QueryMultipleFields {
     fieldNames: string[]
-    searchText?: string
+    request?: SearchRequest
     maxCount?: number
 }

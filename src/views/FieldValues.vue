@@ -98,7 +98,7 @@ export default class FieldValues extends Vue {
     searchService.search(searchRequest)
     this.$store.commit('getMultipleFieldValues', { 
         fieldNames: this.fieldNames,
-        searchText: searchRequest.searchText,
+        request: searchRequest,
         maxCount: this.maxFieldValueCount,
       })
   }
