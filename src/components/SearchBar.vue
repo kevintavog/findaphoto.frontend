@@ -15,9 +15,9 @@ import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 
 @Component({})
 export default class SearchBar extends Vue {
-  @Prop({required: true}) private page!: string
-  @Prop({required: true}) private searchType!: string
-  @Prop({required: true}) private queryProperties!: string
+  @Prop({ required: true }) private page!: string
+  @Prop({ required: true }) private searchType!: string
+  @Prop({ required: true }) private queryProperties!: string
 
   private typedText: string = ''
   private resultsSearchText?: string = undefined
@@ -45,7 +45,7 @@ export default class SearchBar extends Vue {
 
       this.resultsSearchText = this.typedText
 
-      this.$router.push({ path: this.page!, query: searchRouteBuilder.toParameters(searchRequest)})
+      this.$router.push({ path: this.page!, query: searchRouteBuilder.toParameters(searchRequest) })
     }
   }
 

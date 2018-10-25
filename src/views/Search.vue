@@ -19,7 +19,7 @@ import SearchResultsList from '@/components/SearchResultsList.vue'
     SearchResultsList,
   },
   metaInfo() {
-    return  {
+    return {
       title: (this as Search).searchTitle,
     }
   },
@@ -58,6 +58,6 @@ export default class Search extends Vue {
 
 <style scoped>
 .search {
-  margin-top:.5em;
+  margin-top: 0.5em;
 }
 </style>

@@ -53,11 +53,11 @@ interface NamesAndValues {
   components: {
     SearchBar,
   },
-    metaInfo() {
-      return  {
-        title: 'Field values',
-      }
-    },
+  metaInfo() {
+    return {
+      title: 'Field values',
+    }
+  },
 })
 export default class FieldValues extends Vue {
   private maxFieldValueCount = 600
@@ -65,9 +65,9 @@ export default class FieldValues extends Vue {
   private queryProperties: string = 'id'
   private currentSearch = ''
   private namesAndValues: NamesAndValues[] = []
-  private fieldNames = ['aperture', 'cameramake', 'cameramodel', 'cityname', 'countryname', 'displayname', 
-                      'durationseconds', 'exposuretimestring', 'focallengthmm', 'hierarchicalname', 
-                      'iso', 'keywords', 'lensmodel', 'placename', 'sitename', 'statename', 'tags']
+  private fieldNames = ['aperture', 'cameramake', 'cameramodel', 'cityname', 'countryname', 'displayname',
+    'durationseconds', 'exposuretimestring', 'focallengthmm', 'hierarchicalname',
+    'iso', 'keywords', 'lensmodel', 'placename', 'sitename', 'statename', 'tags']
 
   private static readableFieldNamesMap = {
     'aperture': 'Aperture',
@@ -96,11 +96,11 @@ export default class FieldValues extends Vue {
     searchRequest.pageCount = 1
     this.currentSearch = ' ' + searchRouteBuilder.toReadableString(searchRequest)
     searchService.search(searchRequest)
-    this.$store.commit('getMultipleFieldValues', { 
-        fieldNames: this.fieldNames,
-        request: searchRequest,
-        maxCount: this.maxFieldValueCount,
-      })
+    this.$store.commit('getMultipleFieldValues', {
+      fieldNames: this.fieldNames,
+      request: searchRequest,
+      maxCount: this.maxFieldValueCount,
+    })
   }
 
   private toggleShowValues(namesAndValues: NamesAndValues) {
@@ -121,7 +121,7 @@ export default class FieldValues extends Vue {
 
   @Watch('$route')
   private onRouteChanged(to: any, from: any) {
-      this.invokeSearchService(to.query)
+    this.invokeSearchService(to.query)
   }
 
   @Watch('results')
@@ -132,7 +132,7 @@ export default class FieldValues extends Vue {
         const field = f as FieldNameAndValuesIndexResponse
         const vAndc: ValueAndCount[] = []
         for (const v of field.values) {
-          vAndc.push({value: v.value, count: v.count})
+          vAndc.push({ value: v.value, count: v.count })
         }
         updated.push({
           fieldName: field.name,
@@ -159,7 +159,6 @@ export default class FieldValues extends Vue {
 
 
 <style scoped>
-
 .field-values {
   margin-top: 1em;
   text-align: left;
@@ -178,11 +177,10 @@ export default class FieldValues extends Vue {
 
 .field-value-info {
   background: #484848;
-  float:left;
-  margin-bottom:10px;
-  margin-right:10px;
+  float: left;
+  margin-bottom: 10px;
+  margin-right: 10px;
   padding: 10px 10px 10px 10px;
   cursor: auto;
 }
-
 </style>

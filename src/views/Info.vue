@@ -91,7 +91,7 @@ import { FieldNameWithValues } from '@/models/FieldNameWithValues'
 
 @Component({
   metaInfo() {
-    return  {
+    return {
       title: 'Info',
     }
   },
@@ -138,7 +138,6 @@ export default class Info extends Vue {
 
 
 <style scoped>
-
 .info {
   text-align: left;
   margin-left: 1em;
@@ -146,10 +145,10 @@ export default class Info extends Vue {
 }
 
 .path {
-    background: #484848;
-    margin-bottom:10px;
-    margin-right:10px;
-    padding: 10px 10px 10px 10px;
+  background: #484848;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  padding: 10px 10px 10px 10px;
 }
 
 .info-icon {
@@ -163,30 +162,29 @@ export default class Info extends Vue {
 }
 
 .field {
-    background: #484848;
-    float:left;
-    margin-bottom:10px;
-    margin-right:10px;
-    padding: 10px 10px 10px 10px;
-    cursor: pointer;
-    text-decoration: underline;
+  background: #484848;
+  float: left;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  padding: 10px 10px 10px 10px;
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .field-value-info {
-    background: #484848;
-    float:left;
-    margin-bottom:10px;
-    margin-right:10px;
-    padding: 10px 10px 10px 10px;
+  background: #484848;
+  float: left;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  padding: 10px 10px 10px 10px;
 }
 
 .field-values-container {
-    clear:both;
-    background: #686868;    
-    padding: 10px 10px 10px 10px;
-	-webkit-flex-wrap: wrap;
-	display: flex;
-	flex-wrap: wrap;
+  clear: both;
+  background: #686868;
+  padding: 10px 10px 10px 10px;
+  -webkit-flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
-
 </style>

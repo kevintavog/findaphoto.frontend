@@ -107,13 +107,13 @@ import L from 'leaflet'
 import 'leaflet.markercluster'
 
 @Component({
-  components: {
-    SearchBar,
-  },
+    components: {
+        SearchBar,
+    },
     metaInfo() {
-      return  {
-        title: 'Map',
-      }
+        return {
+            title: 'Map',
+        }
     },
 })
 export default class Map extends Vue {
@@ -145,8 +145,8 @@ export default class Map extends Vue {
         if (searchRequest.searchType === 'l'
             && searchRequest.latitude === -1
             && searchRequest.longitude === -1) {
-              console.log('no search to do - location with no lat/lon specified.')
-              return
+            console.log('no search to do - location with no lat/lon specified.')
+            return
         }
 
         this.cluster!.clearLayers()
@@ -229,8 +229,8 @@ export default class Map extends Vue {
     private onResultsChanged(to: any, from: any) {
         if (this.results) {
             this.totalMatches = this.results.totalMatches
-            this.results.groups.forEach( (group) => {
-                group.items.forEach( (item) => {
+            this.results.groups.forEach((group) => {
+                group.items.forEach((item) => {
                     if (item.latitude && item.longitude) {
                         this.updateBounds(item)
                         this.markers.push(this.createMarker(item, this.markers.length))
@@ -256,7 +256,7 @@ export default class Map extends Vue {
 
     private fitToMap(): void {
         if (this.totalMatches > 0) {
-          this.map!.fitBounds([this.southWestCornerLatLng, this.northEastCornerLatLng], undefined)
+            this.map!.fitBounds([this.southWestCornerLatLng, this.northEastCornerLatLng], undefined)
         }
     }
 
@@ -271,13 +271,13 @@ export default class Map extends Vue {
 
     private searchCenterOfMap(): void {
         if (this.map) {
-          const center = this.map!.getCenter()
-          this.searchLocation(center.lat, center.lng)
+            const center = this.map!.getCenter()
+            this.searchLocation(center.lat, center.lng)
         }
     }
 
     private searchNearby(): void {
-        locationProvider.currentLocation( (location?: FPLocation, errorMessage?: string) => {
+        locationProvider.currentLocation((location?: FPLocation, errorMessage?: string) => {
             if (errorMessage && errorMessage.length > 0) {
                 this.$store.commit('addErrorMessage', errorMessage)
             } else if (location) {
@@ -294,7 +294,7 @@ export default class Map extends Vue {
         searchRequest.maxKilometers = Map.defaultSearchDistanceKm     // SHOULD BE ADJUSTABLE BY USER VIA UI
         searchRequest.pageCount = Map.locationPageSize
         searchRequest.first = 1
-        this.$router.push({ path: 'map', query: searchRouteBuilder.toParameters(searchRequest)})
+        this.$router.push({ path: 'map', query: searchRouteBuilder.toParameters(searchRequest) })
     }
 
     private initializeMap(): void {
@@ -310,8 +310,8 @@ export default class Map extends Vue {
         L.control.zoom({ position: 'topright' }).addTo(this.map)
 
         L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          maxZoom: 19,
-          attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+            maxZoom: 19,
+            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
         }).addTo(this.map)
 
         L.control.scale({ position: 'bottomright' }).addTo(this.map)
@@ -320,7 +320,7 @@ export default class Map extends Vue {
             spiderfyDistanceMultiplier: 3,
             maxClusterRadius: 100,
             showCoverageOnHover: false,
-            iconCreateFunction: (clstr: L.MarkerCluster): L.DivIcon =>  {
+            iconCreateFunction: (clstr: L.MarkerCluster): L.DivIcon => {
                 const childMarkers = clstr.getAllChildMarkers()
                 const firstMarker = childMarkers[0]
                 const markerIcon = firstMarker.options.icon as L.DivIcon
@@ -328,13 +328,13 @@ export default class Map extends Vue {
                     iconSize: markerIcon.options.iconSize,
                     html:
                         '<div class="cluster-ontainer"> ' +
-                          markerIcon.options.html +
-                          '<span class="c-badge c-badge--rounded marker-cluster-text">'
-                              + childMarkers.length + '</span>' +
+                        markerIcon.options.html +
+                        '<span class="c-badge c-badge--rounded marker-cluster-text">'
+                        + childMarkers.length + '</span>' +
                         '</div>',
                 })
-              },
-          })
+            },
+        })
         this.map.addLayer(this.cluster)
     }
 
@@ -431,7 +431,7 @@ export default class Map extends Vue {
 .search-bar {
   padding-top: 0.4em;
   padding-bottom: 0.4em;
-  margin-left: -0.50em;
+  margin-left: -0.5em;
 }
 
 .content-container {
@@ -456,17 +456,17 @@ export default class Map extends Vue {
   display: block;
   margin: 0 auto;
   padding-top: 3px;
-  pointer-events: auto;  
+  pointer-events: auto;
 }
 
 .info-image-portrait {
-  max-width:50%;
-  max-height:50%;
+  max-width: 50%;
+  max-height: 50%;
 }
 
 .info-image-landscape {
-  max-width:100%;
-  max-height:50%;
+  max-width: 100%;
+  max-height: 50%;
 }
 
 .dialog-body {

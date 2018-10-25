@@ -197,15 +197,15 @@ export default class SingleItem extends Vue {
 .info-container {
   max-width: 78em;
 }
-@media (max-width: 1024px){
-    .info-container {
-        max-width:64em;
-    }
+@media (max-width: 1024px) {
+  .info-container {
+    max-width: 64em;
+  }
 }
-@media (max-width: 740px){
-    .info-container {
-        max-width:30em;
-    }
+@media (max-width: 740px) {
+  .info-container {
+    max-width: 30em;
+  }
 }
 .result-set-info-text-left {
   color: white;
@@ -243,7 +243,7 @@ export default class SingleItem extends Vue {
   text-align: left;
   margin-left: 10px;
   color: white;
-  background-color: #34495E;
+  background-color: #34495e;
 }
 .media-source-clickable {
   margin-left: 1em;
@@ -254,7 +254,7 @@ export default class SingleItem extends Vue {
 }
 .media-source-table-header {
   color: yellow;
-  background-color:#14395E;
+  background-color: #14395e;
   cursor: auto;
 }
 .media-source-message {
@@ -262,7 +262,7 @@ export default class SingleItem extends Vue {
   font-size: 1.9em;
 }
 .media-source-row:nth-child(odd) {
-  background: #14395E;
+  background: #14395e;
 }
 .media-source-name {
   margin-left: 5px;
@@ -273,5 +273,4 @@ export default class SingleItem extends Vue {
   margin-right: 5px;
   display: inline;
 }
-
 </style>

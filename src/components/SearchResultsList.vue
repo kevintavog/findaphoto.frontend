@@ -136,7 +136,6 @@ export default class SearchResultsList extends Vue {
 </script>
 
 <style scoped>
-
 .search-description {
   font-size: 1.5em;
   margin-top: 0.2em;
@@ -147,7 +146,7 @@ export default class SearchResultsList extends Vue {
   text-align: center;
 }
 .group-outer-container {
-	background: #303030;
+  background: #303030;
   margin-bottom: 1.5em;
 }
 .group-inner-container {
@@ -157,41 +156,40 @@ export default class SearchResultsList extends Vue {
   margin-left: 5px;
 }
 .group-item-header {
-	font-size: 2em;
-	padding-left: 5px;
+  font-size: 2em;
+  padding-left: 5px;
   text-align: left;
 }
 .group-item-list {
-	-webkit-flex-wrap: wrap;
-	display: flex;
-	flex-wrap: wrap;
-	float:left;
-  font-size:small;
+  -webkit-flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  float: left;
+  font-size: small;
   width: 100%;
 }
 .group-item {
   background: #585858;
-  float:left;
-  margin-bottom:10px;
-  margin-right:10px;
+  float: left;
+  margin-bottom: 10px;
+  margin-right: 10px;
   padding: 10px 10px 3px 10px;
 }
 .group-item-thumbnail {
-  text-align:center;
+  text-align: center;
 }
 .group-item-info {
-	font-size:1.2em;
+  font-size: 1.2em;
 }
 .group-item-info-text-left {
-	color:white;
-	text-align: left;
-	padding:0 0 0 3px;
+  color: white;
+  text-align: left;
+  padding: 0 0 0 3px;
 }
 .group-item-info-text-right {
-	color:white;
-	text-align: right;
-	margin:0 0 0 10px;
-	padding:0 3px 0 0;
+  color: white;
+  text-align: right;
+  margin: 0 0 0 10px;
+  padding: 0 3px 0 0;
 }
-
 </style>

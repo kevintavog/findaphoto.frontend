@@ -72,7 +72,7 @@ export default class Paging extends Vue {
         throw new Error('Unhandled searchType: ' + searchRequest.searchType)
     }
 
-    this.$router.push({ path: page, query: searchRouteBuilder.toParameters(searchRequest)})
+    this.$router.push({ path: page, query: searchRouteBuilder.toParameters(searchRequest) })
   }
 
   private get serverResponse(): ServerResponseModule {

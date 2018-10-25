@@ -28,7 +28,7 @@ import { dataDisplayer } from '@/providers/DataDisplayerProvider'
     SearchResultsList,
   },
   metaInfo() {
-    return  {
+    return {
       title: (this as ByDay).byDayTitle,
     }
   },
@@ -55,7 +55,7 @@ export default class ByDay extends Vue {
     searchRequest.month = byDay.month
     searchRequest.day = byDay.day
     searchRequest.first = 1
-    this.$router.push({ path: 'byday', query: searchRouteBuilder.toParameters(searchRequest)})
+    this.$router.push({ path: 'byday', query: searchRouteBuilder.toParameters(searchRequest) })
   }
 
   private mounted() {
@@ -115,17 +115,16 @@ export default class ByDay extends Vue {
   margin-left: 10px;
   margin-top: 0;
   padding-top: 0;
-  color: #FFF;
-  float:left;
+  color: #fff;
+  float: left;
 }
 .previous-day {
   margin-left: 10px;
-  float:left;
+  float: left;
 }
 
 .next-day {
   margin-right: 10px;
-  float:right;
+  float: right;
 }
-
 </style>

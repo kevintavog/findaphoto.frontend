@@ -20,11 +20,11 @@ import { SearchHint } from '@/models/SearchHint'
 
 
 @Component({
-    metaInfo() {
-      return  {
-        title: 'Example searches',
-      }
-    },
+  metaInfo() {
+    return {
+      title: 'Example searches',
+    }
+  },
 })
 export default class ExampleSearches extends Vue {
   private searchHints: SearchHint[] = [
@@ -43,7 +43,6 @@ export default class ExampleSearches extends Vue {
 
 
 <style scoped>
-
 a {
   text-decoration: none;
 }
@@ -52,8 +51,8 @@ a {
   background: #484848;
   display: flex;
   flex-wrap: wrap;
-  margin-bottom:10px;
-  margin-right:10px;
+  margin-bottom: 10px;
+  margin-right: 10px;
   padding: 10px 10px 10px 10px;
 }
 .searchHintDescription {
@@ -64,5 +63,4 @@ a {
   text-decoration: underline;
   float: left;
 }
-
 </style>
