@@ -12,6 +12,7 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { SearchRequest } from '@/models/SearchRequest'
 import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
+import { latLonConverter } from '@/providers/LatLonConverter'
 
 @Component({})
 export default class SearchBar extends Vue {
@@ -42,6 +43,13 @@ export default class SearchBar extends Vue {
       searchRequest.searchText = this.typedText
       searchRequest.properties = this.queryProperties
       searchRequest.pageCount = SearchRequest.defaultItemsPerPage
+
+      const latLon = latLonConverter.parse(searchRequest.searchText)
+      if (latLon) {
+        searchRequest.searchType = 'l'
+        searchRequest.latitude = latLon.latitude
+        searchRequest.longitude = latLon.longitude
+      }
 
       this.resultsSearchText = this.typedText
 

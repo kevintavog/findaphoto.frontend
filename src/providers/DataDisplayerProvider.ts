@@ -119,7 +119,7 @@ export class DataDisplayerProvider {
     }
 
     public longitudeDms(longitude: number) {
-        return this.convertToDms(longitude, ['E', 'W'], false)
+        return this.convertToDms(longitude, ['E', 'W'], true)
     }
 
     public latDms(item: SearchItem) {
@@ -127,7 +127,7 @@ export class DataDisplayerProvider {
     }
 
     public latitudeDms(latitude: number) {
-        return this.convertToDms(latitude, ['N', 'S'], false)
+        return this.convertToDms(latitude, ['N', 'S'], true)
     }
 
 

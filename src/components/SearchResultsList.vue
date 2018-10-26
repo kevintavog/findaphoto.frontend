@@ -3,7 +3,7 @@
 
     <!-- The results header -->
     <h2 v-if="results.totalMatches == 0" class="search-result-info" >
-      No matches were found for '{{request.searchText}}'
+      No matches were found {{searchDescription}}
     </h2>
     <div v-else>
       <div v-if="!hideSearchDescription" class="search-description" >
