@@ -38,8 +38,10 @@
                           </router-link>
                       </div>
                       <div class="result-set-info-text-left o-grid__cell c-text">
-                          <font-awesome-icon class="info-icon" icon="folder"/>
-                          {{searchItem.path}}
+                          <router-link :to="{ path: '/search', query: { q: 'path.value:' + displayer.searchablePath(searchItem) } }" >
+                            <font-awesome-icon class="info-icon" icon="folder"/>
+                            {{searchItem.path}}
+                          </router-link>
                       </div>
                   </div>
 

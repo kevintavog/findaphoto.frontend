@@ -106,6 +106,21 @@ export class DataDisplayerProvider {
         }
     }
 
+    public searchablePath(item: SearchItem): string {
+        if (!item.path || !item.imageName) {
+            return ''
+        }
+
+        // Something about spaces & slashes in keywords makes searching them difficult.
+        // This is gross - replacing \ & space with ? seems hacky.
+        const last = item.path.lastIndexOf(item.imageName)
+        if (last < 0) {
+            return ''
+        }
+
+        return item.path.substr(0, last).replace(/\\/g, '?').replace(/ /g, '?') + '*'
+    }
+
     public dateToLocaleDateAndTime(date: Date) {
         if (date != null) {
             const d = new Date(date)
