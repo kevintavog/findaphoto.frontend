@@ -39,36 +39,36 @@
 
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator"
-import { ErrorMessageAndId } from "@/store/ErrorMessageModule"
-import { searchRouteBuilder } from "@/providers/SearchRouteBuilder"
+import { Component, Vue, Watch } from 'vue-property-decorator'
+import { ErrorMessageAndId } from '@/store/ErrorMessageModule'
+import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 
 @Component({
   metaInfo() {
     return {
-      title: "",
-      titleTemplate: titleChunk => {
-        return titleChunk ? `${titleChunk} - Find A Photo` : "Find A Photo"
-      }
+      title: '',
+      titleTemplate: (titleChunk) => {
+        return titleChunk ? `${titleChunk} - Find A Photo` : 'Find A Photo'
+      },
     }
-  }
+  },
 })
 export default class App extends Vue {
   private menuOpen = false
 
   private created() {
-    window.addEventListener("mouseup", this.mouseUp)
+    window.addEventListener('mouseup', this.mouseUp)
   }
 
   private destroyed() {
-    window.addEventListener("mouseup", this.mouseUp)
+    window.addEventListener('mouseup', this.mouseUp)
   }
 
   private mouseUp(event: MouseEvent) {
     if (this.menuOpen) {
       if (event.target) {
         const element = event.target! as HTMLElement
-        if (element.closest(".drop-down-menu-container")) {
+        if (element.closest('.drop-down-menu-container')) {
           return
         }
       }
@@ -80,7 +80,7 @@ export default class App extends Vue {
     this.menuOpen = !this.menuOpen
   }
 
-  @Watch("$route")
+  @Watch('$route')
   private onRouteChanged(to: any, from: any) {
     if (this.menuOpen) {
       this.toggleMenu()
@@ -90,18 +90,18 @@ export default class App extends Vue {
   private navigateToHome() {
     // If not on the home page and there's a text search, retain the text search
     const searchRequest = this.$store.state.serverRequest.request
-    if (this.$route.name !== "search" && searchRequest.searchType.length > 0 && searchRequest.searchType !== 'd') {
+    if (this.$route.name !== 'search' && searchRequest.searchType.length > 0 && searchRequest.searchType !== 'd') {
       this.$router.push({
-        path: "/search",
-        query: searchRouteBuilder.toPrimaryParameters(searchRequest)
+        path: '/search',
+        query: searchRouteBuilder.toPrimaryParameters(searchRequest),
       })
     } else {
-      this.$router.push({ path: "/search" })
+      this.$router.push({ path: '/search' })
     }
   }
 
   private navigateToByDay() {
-    this.$router.push({ path: "/byday" })
+    this.$router.push({ path: '/byday' })
   }
 
   private navigateToMap() {
@@ -109,11 +109,11 @@ export default class App extends Vue {
     const searchRequest = this.$store.state.serverRequest.request
     if (searchRequest.searchType.length > 0) {
       this.$router.push({
-        path: "/map",
-        query: searchRouteBuilder.toPrimaryParameters(searchRequest)
+        path: '/map',
+        query: searchRouteBuilder.toPrimaryParameters(searchRequest),
       })
     } else {
-      this.$router.push({ path: "/map" })
+      this.$router.push({ path: '/map' })
     }
   }
 
@@ -121,16 +121,16 @@ export default class App extends Vue {
     const searchRequest = this.$store.state.serverRequest.request
     if (searchRequest.searchType.length > 0) {
       this.$router.push({
-        path: "/field-values",
-        query: searchRouteBuilder.toPrimaryParameters(searchRequest)
+        path: '/field-values',
+        query: searchRouteBuilder.toPrimaryParameters(searchRequest),
       })
     } else {
-      this.$router.push({ path: "/field-values" })
+      this.$router.push({ path: '/field-values' })
     }
   }
 
   private closeError(err: ErrorMessageAndId): void {
-    this.$store.commit("closeErrorMessage", err)
+    this.$store.commit('closeErrorMessage', err)
   }
 
   private get errors(): ErrorMessageAndId[] {

@@ -145,7 +145,6 @@ export default class Map extends Vue {
         if (searchRequest.searchType === 'l'
             && searchRequest.latitude === -1
             && searchRequest.longitude === -1) {
-            console.log('no search to do - location with no lat/lon specified.')
             return
         }
 

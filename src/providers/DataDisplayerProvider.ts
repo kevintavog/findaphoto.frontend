@@ -158,7 +158,7 @@ export class DataDisplayerProvider {
         return {
             degrees: d,
             minutes: m,
-            seconds: s
+            seconds: s,
         }
     }
 }

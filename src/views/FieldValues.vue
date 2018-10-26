@@ -60,6 +60,25 @@ interface NamesAndValues {
   },
 })
 export default class FieldValues extends Vue {
+  private static readableFieldNamesMap = {
+    aperture: 'Aperture',
+    cameramake: 'Camera Make',
+    cameramodel: 'Camera Model',
+    cityname: 'City',
+    countryname: 'Country',
+    displayname: 'Display name',
+    durationseconds: 'Duration seconds',
+    exposuretimestring: 'Exposure time',
+    focallengthmm: 'Focal length',
+    hierarchicalname: 'Hierarchical name',
+    iso: 'ISO',
+    keywords: 'Keywords',
+    lensmodel: 'Lens model',
+    placename: 'Place name',
+    sitename: 'Site name',
+    statename: 'State name',
+    tags: 'Tags',
+  }
   private maxFieldValueCount = 600
   private searchType = 's'
   private queryProperties: string = 'id'
@@ -68,26 +87,6 @@ export default class FieldValues extends Vue {
   private fieldNames = ['aperture', 'cameramake', 'cameramodel', 'cityname', 'countryname', 'displayname',
     'durationseconds', 'exposuretimestring', 'focallengthmm', 'hierarchicalname',
     'iso', 'keywords', 'lensmodel', 'placename', 'sitename', 'statename', 'tags']
-
-  private static readableFieldNamesMap = {
-    'aperture': 'Aperture',
-    'cameramake': 'Camera Make',
-    'cameramodel': 'Camera Model',
-    'cityname': 'City',
-    'countryname': 'Country',
-    'displayname': 'Display name',
-    'durationseconds': 'Duration seconds',
-    'exposuretimestring': 'Exposure time',
-    'focallengthmm': 'Focal length',
-    'hierarchicalname': 'Hierarchical name',
-    'iso': 'ISO',
-    'keywords': 'Keywords',
-    'lensmodel': 'Lens model',
-    'placename': 'Place name',
-    'sitename': 'Site name',
-    'statename': 'State name',
-    'tags': 'Tags',
-  }
 
 
   private invokeSearchService(query: any): void {
@@ -138,7 +137,7 @@ export default class FieldValues extends Vue {
           fieldName: field.name,
           readableName: this.getReadableFieldName(field.name),
           showValues: false,
-          values: vAndc
+          values: vAndc,
         })
       }
     }
@@ -146,7 +145,7 @@ export default class FieldValues extends Vue {
   }
 
   private getReadableFieldName(fieldName: string): string {
-    for (let [key, value] of Object.entries(FieldValues.readableFieldNamesMap)) {
+    for (const [key, value] of Object.entries(FieldValues.readableFieldNamesMap)) {
       if (key === fieldName) {
         return value
       }
