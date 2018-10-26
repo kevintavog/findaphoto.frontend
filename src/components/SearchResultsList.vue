@@ -6,7 +6,7 @@
       No matches were found for '{{request.searchText}}'
     </h2>
     <div v-else>
-      <div v-if="hideSearchDescription !== true" class="search-description" >
+      <div v-if="!hideSearchDescription" class="search-description" >
         Results {{searchDescription}}
       </div>
     </div>
@@ -26,7 +26,7 @@
       <div style="clear:both;"></div>
       <div class="group-outer-container">
         <div class="group-inner-container">
-          <div class="group-item-header"> {{groupName(group)}} </div>
+          <div v-if="!hideGroups" class="group-item-header"> {{groupName(group)}} </div>
 
           <div class="group-item-list">
             <div v-for="item in group.items" :key="item.id" class="group-item">
@@ -57,11 +57,9 @@
                   </div>
                   <div class="group-item-info-text-right o-grid__cell c-text">{{displayer.keywordsString(item)}}</div>
                 </div>
-                <!-- <div class="o-grid" *ngIf="uiState.showDistance">
-                    <div *ngIf="item.distancekm == 0"> Same location</div>
-                    <div *ngIf="item.distancekm > 0 && item.distancekm < 1.0"> Distance: {{(item.distancekm * 1000).toFixed(0)}} meters</div>
-                    <div *ngIf="item.distancekm >= 1.0"> Distance: {{item.distancekm.toFixed(2)}} KM</div>
-                </div> -->
+                <div class="o-grid" v-if="showDistance">
+                  <div> {{displayer.getItemDistanceString(item)}} </div>
+                </div>
                 <div class="o-grid" v-if="item.warnings">
                     <span class="c-badge c-badge--secondary">{{item.warnings.length}}</span>
                 </div>
@@ -94,9 +92,12 @@ import Paging from '@/components/Paging.vue'
 
 export default class SearchResultsList extends Vue {
   private static days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-  @Prop() private dayInGroupName!: boolean
-  @Prop() private hideSearchDescription!: boolean
+  @Prop(Boolean) private dayInGroupName!: boolean
+  @Prop(Boolean) private hideSearchDescription!: boolean
+  @Prop(Boolean) private showDistance!: boolean
+  @Prop(Boolean) private hideGroups!: boolean
   private displayer = dataDisplayer
+
 
   private get isSearching(): boolean {
     return this.$store.state.serverResponse.isSearching

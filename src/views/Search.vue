@@ -1,7 +1,7 @@
 <template>
    <div class="search">
     <SearchBar page="search" :search-type="searchType" :query-properties="queryProperties" />
-    <SearchResultsList />
+    <SearchResultsList :showDistance="showDistance" :hideGroups="hideGroups"  />
   </div>
 </template>
 
@@ -29,11 +29,19 @@ export default class Search extends Vue {
   private queryProperties: string = 'id,city,keywords,imageName,createdDate,latitude,longitude' +
     ',thumbUrl,slideUrl,warnings'
   private searchTitle = 'Search'
+  private hideGroups = false
+  private showDistance = false
 
 
   private invokeSearchService(query: any): void {
     const searchRequest = searchRouteBuilder.toSearchRequest(query, this.searchType)
     searchRequest.properties = this.queryProperties
+
+    this.hideGroups = searchRequest.searchType === 'l'
+    this.showDistance = searchRequest.searchType === 'l'
+    if (this.showDistance) {
+      searchRequest.properties += ',distanceKm'
+    }
     searchService.search(searchRequest)
     this.searchTitle = searchRequest.searchText
   }

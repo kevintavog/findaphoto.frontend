@@ -9,7 +9,8 @@ interface DegreesMinutesSeconds {
 export class DataDisplayerProvider {
     public monthNames: string[] = [
         'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September',
-        'October', 'November', 'December' ]
+        'October', 'November', 'December']
+
 
     public keywordsString(item: SearchItem): string {
         if (!item.keywords) {
@@ -91,6 +92,20 @@ export class DataDisplayerProvider {
         return undefined
     }
 
+    public getItemDistanceString(item: SearchItem) {
+        if (!item.distanceKm) {
+            return ''
+        }
+
+        if (item.distanceKm === 0) {
+            return 'Same location'
+        } else if (item.distanceKm < 1.0) {
+            return 'Distance: ' + (item.distanceKm * 1000).toFixed(0) + ' meters'
+        } else {
+            return 'Distance: ' + item.distanceKm.toFixed(2) + ' KM'
+        }
+    }
+
     public dateToLocaleDateAndTime(date: Date) {
         if (date != null) {
             const d = new Date(date)
@@ -143,7 +158,8 @@ export class DataDisplayerProvider {
         return {
             degrees: d,
             minutes: m,
-            seconds: s}
+            seconds: s
+        }
     }
 }
 
