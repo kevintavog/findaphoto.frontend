@@ -12,79 +12,100 @@
           </a>
         </div>
 
+        <br>
+
         <div class="o-container info-container" >
           <div class="o-grid">
             <div class="o-grid__cell">
                 <div class="o-grid">
                     <div class="result-set-info-text-left o-grid__cell c-text">
-                        <font-awesome-icon icon="file"/>
+                        <font-awesome-icon class="info-icon" icon="file"/>
                         {{searchItem.imageName}}
                     </div>
                     <div class="result-set-info-text-left o-grid__cell c-text">
-                        <font-awesome-icon icon="tags"/>
-                        {{displayer.keywordsString(searchItem)}}
+                        <font-awesome-icon class="info-icon" icon="tags"/>
+                        <span v-for="k in searchItem.keywords" :key="k">
+                          <router-link :to="{ path: '/search', query: { q: 'keywords:' + k } }" >{{k}}</router-link>,
+                        </span>
                     </div>
                 </div>
 
                   <div class="o-grid">
                       <div class="result-set-info-text-left o-grid__cell c-text">
-                          <font-awesome-icon icon="folder"/>
-                          {{searchItem.path}}
+                          <router-link :to="{ path: '/byday', query: { m: displayer.itemMonth(searchItem), d: displayer.itemDay(searchItem) } }" >
+                            <font-awesome-icon class="info-icon" icon="calendar"/>
+                            {{displayer.getItemLocaleDateAndTime(searchItem)}}
+                          </router-link>
                       </div>
                       <div class="result-set-info-text-left o-grid__cell c-text">
-                          <font-awesome-icon icon="map-marker"/>
-                          {{searchItem.locationName}}
-                          <!-- <a *ngIf="hasLocation()" [routerLink]="['/bylocation']" [queryParams]="{ lat:itemInfo.latitude, lon:itemInfo.longitude }">
-                              <i class="fa fa-map-marker"></i> {{searchItem.locationName}}
-                          </a> -->
+                          <font-awesome-icon class="info-icon" icon="folder"/>
+                          {{searchItem.path}}
                       </div>
                   </div>
 
                   <div class="o-grid">
                       <div class="result-set-info-text-left o-grid__cell c-text">
-                          <font-awesome-icon icon="calendar"/>
-                          {{displayer.getItemLocaleDateAndTime(searchItem)}}
-                          <!-- <a [routerLink]="['/byday']" [queryParams]="{ m:displayer.itemMonth(itemInfo), d:displayer.itemDay(itemInfo) }">
-                              <i class="fa fa-calendar"></i> {{displayer.getItemLocaleDateAndTime(itemInfo)}}
-                          </a> -->
+                        <font-awesome-icon class="info-icon" icon="camera"/> {{searchItem.cameramake}} {{searchItem.cameramodel}}
+                        <div v-if="searchItem.lensinfo" class="camera-and-media-info-item">, {{searchItem.lensinfo}}</div>
                       </div>
                       <div class="result-set-info-text-left o-grid__cell c-text">
-                          <font-awesome-icon icon="map"/>
-                          {{displayer.latDms(searchItem)}}, {{displayer.lonDms(searchItem)}}
-                          <!-- <a *ngIf="hasLocation()" href="http://maps.google.com/maps?q={{searchItem.latitude}},{{searchItem.longitude}}">
-                              <i class="fa fa-map"></i> {{displayer.latDms(itemInfo)}}, {{displayer.lonDms(itemInfo)}}
-                          </a> -->
+                          <font-awesome-icon class="info-icon" icon="map-marker"/>
+                          <span v-if="searchItem.locationDisplayName">
+                            <router-link :to="{ path: '/map', query: { lat: searchItem.latitude, lon: searchItem.longitude } }" >
+                              {{searchItem.locationName}}
+                            </router-link>
+                          </span>
                       </div>
                   </div>
-              </div>
 
-              <div class="o-grid__cell o-grid__cell--width-20">
-                  <div class="map-content" id="singleMap" >
+                  <div class="o-grid">
+                      <div class="result-set-info-text-left o-grid__cell c-text">
+                        <span v-if="searchItem.fnumber && searchItem.fnumber != 0"> <font-awesome-icon class="info-icon" icon="info"/> ƒ/{{searchItem.fnumber}}, </span>
+                        <span v-if="searchItem.exposuretimestring" class="camera-and-media-info-item">{{searchItem.exposuretimestring}} s, </span>
+                        <span v-if="searchItem.focallength" class="camera-and-media-info-item">{{searchItem.focallength}} mm, </span>
+                        <span v-if="searchItem.iso" class="camera-and-media-info-item">ISO {{searchItem.iso}} </span>
+                        <span v-if="searchItem.durationseconds" class="camera-and-media-info-item">Video duration: {{searchItem.durationseconds}} seconds</span>
+                      </div>
+                      <div class="result-set-info-text-left o-grid__cell c-text">
+                        <font-awesome-icon class="info-icon" icon="map"/>
+                        <span v-if="searchItem.locationDisplayName">
+                          {{displayer.latDms(searchItem)}}, {{displayer.lonDms(searchItem)}}
+                          <span class="map-link">
+                            <a :href="'http://maps.google.com/maps?q=' + searchItem.latitude + ',' + searchItem.longitude" >
+                              (Google)
+                            </a>
+                          </span>
+                        </span>
+                      </div>
                   </div>
-              </div>
-          </div>
 
-          <div v-if="searchItem.locationName" class="full-location-name">
-              <font-awesome-icon icon="map-pin"/>
-              Location name: {{searchItem.locationDisplayName}}
+                  <br>
+
+                  <div v-if="searchItem.locationName" class="o-grid">
+                    <router-link :to="{ path: '/map', query: { lat: searchItem.latitude, lon: searchItem.longitude } }" >
+                      <div class="result-set-info-text-left o-grid__cell c-text">
+                        <font-awesome-icon class="info-icon" icon="map-pin"/>
+                        Location name: {{searchItem.locationDisplayName}}
+                      </div>
+                    </router-link>
+                  </div>
+                  <br>
+
+                  <div v-if="searchItem.tags" class="o-grid">
+                      <div class="result-set-info-text-left o-grid__cell c-text">
+                        <font-awesome-icon class="info-icon" icon="server"/>
+                        Automatic tags:
+                        <span v-for="t in searchItem.tags" :key="t">
+                          <router-link :to="{ path: '/search', query: { q: 'tags:' + t } }" >{{t}}</router-link>,
+                        </span>
+                      </div>
+                  </div>
+
+              </div>
+
           </div>
-          <div v-if="searchItem.tags" class="full-location-name" >
-              <font-awesome-icon icon="server"/>
-              Automatic tags: {{displayer.tagsString(searchItem)}}
-          </div>
-          <br>
      </div>
     </div>
-  </div>
-
-  <div v-if="hasSearchItem" class="camera-and-media-info" >
-    <div class="camera-and-media-info-item"> <font-awesome-icon icon="camera"/> {{searchItem.cameramake}} {{searchItem.cameramodel}}</div>
-    <div v-if="searchItem.lensinfo" class="camera-and-media-info-item">, {{searchItem.lensinfo}}</div> <br>
-    <div v-if="searchItem.fnumber && searchItem.fnumber != 0" class="camera-and-media-info-item"> <font-awesome-icon icon="info"/> ƒ/{{searchItem.fnumber}}, </div>
-    <div v-if="searchItem.exposuretimestring" class="camera-and-media-info-item">{{searchItem.exposuretimestring}} s, </div>
-    <div v-if="searchItem.focallength" class="camera-and-media-info-item">{{searchItem.focallength}} mm, </div>
-    <div v-if="searchItem.iso" class="camera-and-media-info-item">ISO {{searchItem.iso}} </div>
-    <div v-if="searchItem.durationseconds" class="camera-and-media-info-item">Video duration: {{searchItem.durationseconds}} seconds</div>
   </div>
 
   <br>
@@ -114,6 +135,7 @@
       </div>
   </div>
 
+  <br>
 
   </div>
 </template>
@@ -125,6 +147,7 @@ import { MediaIndexResponse } from '@/models/IndexResponse'
 import { SearchRequest } from '@/models/SearchRequest'
 import { dataDisplayer } from '@/providers/DataDisplayerProvider'
 import { searchService } from '@/services/SearchService'
+import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 
 @Component({})
 export default class SingleItem extends Vue {
@@ -137,17 +160,15 @@ export default class SingleItem extends Vue {
 
   private displayer = dataDisplayer
   private searchItem: SearchItem = emptySearchItem
-  private errorMessage: string = ''
   private showMediaSource = false
   private mediaSource: MediaIndexResponse = { sourceValues: [] }
 
+  private get tags(): string {
+    return dataDisplayer.tagsString(this.searchItem)
+  }
 
   private get hasSearchItem(): boolean {
     return this.searchItem.id.length > 0
-  }
-
-  private get hasError(): boolean {
-    return this.errorMessage.length > 0
   }
 
   private toggleShowMediaSource() {
@@ -156,24 +177,18 @@ export default class SingleItem extends Vue {
 
   private mounted() {
     this.searchItem.id = ''
-    this.errorMessage = ''
 
     const query = this.$route.query
-    const searchRequest = new SearchRequest()
-    searchRequest.searchType = 's'
-    searchRequest.properties = SingleItem.QueryProperties + ',' + SingleItem.CameraProperties +
+    const searchRequest = searchRouteBuilder.toSearchRequest(query, 's')
+    searchRequest.properties = SingleItem.QueryProperties +
+      ',' + SingleItem.CameraProperties +
       ',' + SingleItem.ImageProperties
-    searchRequest.first = 1
     searchRequest.pageCount = 1
-    searchRequest.searchText = 'path:' + query.id
     searchRequest.drilldown = ''
     searchService.searchCallback(searchRequest, (results?: SearchResults, message?: string) => {
       if (results && results.totalMatches > 0) {
         this.searchItem = results.groups[0].items[0]
         this.getMediaSource()
-      }
-      if (message) {
-        this.errorMessage = message
       }
     })
   }
@@ -190,6 +205,12 @@ export default class SingleItem extends Vue {
 </script>
 
 <style scoped>
+.singleitem {
+  text-align: initial;
+}
+.info-icon {
+  width: 1.5em;
+}
 .centered-image {
   display: block;
   margin: 0 auto;
@@ -207,6 +228,7 @@ export default class SingleItem extends Vue {
     max-width: 30em;
   }
 }
+
 .result-set-info-text-left {
   color: white;
   text-align: left;
@@ -221,6 +243,10 @@ export default class SingleItem extends Vue {
 }
 .full-location-name {
   margin-left: 10px;
+}
+
+.map-link {
+  margin-left: 1em;
 }
 .map-content {
   width: 200px;

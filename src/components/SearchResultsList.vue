@@ -33,7 +33,7 @@
 
               <div class="group-item-thumbnail">
                 <!-- TODO: In order for slideshow to work, overall search index is needed (group index + item index) -->
-                <router-link :to="{ path: 'singleitem', query: { id: item.id }}">
+                <router-link :to="{ path: 'singleitem', query: singleItemParams(group, item)}">
                   <img :src="item.thumbUrl" >
                 </router-link>
               </div>
@@ -81,7 +81,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { SearchRequest } from '@/models/SearchRequest'
 import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 import { dataDisplayer } from '@/providers/DataDisplayerProvider'
-import { SearchGroup, SearchResults } from '@/models/SearchResults'
+import { SearchGroup, SearchResults, SearchItem } from '@/models/SearchResults'
 import Paging from '@/components/Paging.vue'
 
 @Component({
@@ -131,6 +131,30 @@ export default class SearchResultsList extends Vue {
       return Math.ceil(this.results.totalMatches / this.$store.state.serverRequest.request.pageCount)
     }
     return 0
+  }
+
+  private singleItemParams(group: SearchGroup, item: SearchItem): any {
+    const params = searchRouteBuilder.toPrimaryParameters(this.request)
+    params.id = item.id
+    params.i = this.searchIndex(group, item).toString()
+    return params
+  }
+
+  private searchIndex(group: SearchGroup, item: SearchItem): number {
+    let index = 0
+    for (const g of this.results.groups) {
+      if (g === group) {
+        for (const i of g.items) {
+          if (i === item) {
+            return this.request.first + index
+          }
+          index += 1
+        }
+      }
+      index += g.items.length
+    }
+
+    return -1
   }
 }
 

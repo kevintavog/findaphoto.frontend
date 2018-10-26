@@ -47,6 +47,8 @@ export class SearchRouteBuilder {
 
         if ('p' in properties) {
             searchRequest.first = 1 + (searchRequest.pageCount * (Number(properties.p) - 1))
+        } else if ('i' in properties) {
+            searchRequest.first = +properties.i
         }
 
         if (searchRequest.searchType === 'd') {
