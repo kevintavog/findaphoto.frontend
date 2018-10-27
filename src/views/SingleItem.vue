@@ -19,9 +19,7 @@
 
       <div >
         <div v-if="searchItem.mediaType === 'image'" class="media-container" >
-          <a :href="searchItem.mediaUrl">
             <img class="o-image centered-image" :src="searchItem.slideUrl" />
-          </a>
         </div>
         <div v-if="searchItem.mediaType == 'video'" class="media-container" >
             <video class="o-image centered-image" controls autoplay :src="searchItem.mediaUrl" />
@@ -34,8 +32,10 @@
             <div class="o-grid__cell">
                 <div class="o-grid">
                     <div class="result-set-info-text-left o-grid__cell c-text">
+                      <a :href="searchItem.mediaUrl">
                         <font-awesome-icon class="info-icon" icon="file"/>
                         {{searchItem.imageName}}
+                      </a>
                     </div>
                     <div class="result-set-info-text-left o-grid__cell c-text">
                         <font-awesome-icon class="info-icon" icon="tags"/>
@@ -87,11 +87,14 @@
                         <font-awesome-icon class="info-icon" icon="map"/>
                         <span v-if="searchItem.locationDisplayName">
                           {{displayer.latDms(searchItem)}}, {{displayer.lonDms(searchItem)}}
-                          <span class="map-link">
-                            <a :href="'http://maps.google.com/maps?q=' + searchItem.latitude + ',' + searchItem.longitude" >
+                            <a class="map-link" 
+                                :href="'http://maps.google.com/maps?q=' + searchItem.latitude + ',' + searchItem.longitude" >
                               (Google)
                             </a>
-                          </span>
+                            <a class="map-link"
+                                :href="'http://www.openstreetmap.org/?mlat=' + searchItem.latitude + '&mlon='  + searchItem.longitude" >
+                              (OpenStreetMap)
+                            </a>
                         </span>
                       </div>
                   </div>

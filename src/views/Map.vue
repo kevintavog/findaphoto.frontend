@@ -70,13 +70,15 @@
                       <img v-if="selectedItem.width < selectedItem.height" class="info-image info-image-portrait" v-bind:src="selectedItem.slideUrl" >
                   </span>
                   <div v-if="selectedItem.mediaType == 'video'" >
-                    <video v-if="selectedItem.width >= selectedItem.height" class="info-image info-image-landscape" controls autoplay :src="selectedItem.mediaUrl" />
-                    <video v-if="selectedItem.width < selectedItem.height" class="info-image info-image-portrait" controls autoplay :src="selectedItem.mediaUrl" />
+                      <video v-if="selectedItem.width >= selectedItem.height" class="info-image info-image-landscape" controls autoplay :src="selectedItem.mediaUrl" />
+                      <video v-if="selectedItem.width < selectedItem.height" class="info-image info-image-portrait" controls autoplay :src="selectedItem.mediaUrl" />
                   </div>
 
                   <div class="c-paragraph">
-                    <font-awesome-icon icon="file"/>
-                    {{selectedItem.imageName}}
+                    <a :href="selectedItem.mediaUrl">
+                        <font-awesome-icon icon="file"/>
+                        {{selectedItem.imageName}}
+                    </a>
                   </div>
                   <div class="c-paragraph">
                     <font-awesome-icon icon="folder"/>
