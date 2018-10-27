@@ -5,13 +5,25 @@
     </div>
 
     <div v-if="hasSearchItem">
+      <div class="next-previous-group">
+        <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
+              @click="previousItem" >
+            <font-awesome-icon icon="arrow-left"/>
+        </button>
+        <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
+              @click="nextItem" >
+            <font-awesome-icon icon="arrow-right"/>
+        </button>
+        {{itemIndex}} of {{totalMatches}}
+      </div>
+
       <div >
-        <div v-if="searchItem.mediaType === 'image'" >
+        <div v-if="searchItem.mediaType === 'image'" class="media-container" >
           <a :href="searchItem.mediaUrl">
             <img class="o-image centered-image" :src="searchItem.slideUrl" />
           </a>
         </div>
-        <div v-if="searchItem.mediaType == 'video'" >
+        <div v-if="searchItem.mediaType == 'video'" class="media-container" >
             <video class="o-image centered-image" controls autoplay :src="searchItem.mediaUrl" />
         </div>
 
@@ -140,7 +152,17 @@
       </div>
   </div>
 
-  <br>
+  <div class="next-previous-group">
+    <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
+          @click="previousItem" >
+        <font-awesome-icon icon="arrow-left"/>
+    </button>
+    <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
+          @click="nextItem" >
+        <font-awesome-icon icon="arrow-right"/>
+    </button>
+    {{itemIndex}} of {{totalMatches}}
+  </div>
 
   </div>
 </template>
@@ -167,6 +189,8 @@ export default class SingleItem extends Vue {
   private searchItem: SearchItem = emptySearchItem
   private showMediaSource = false
   private mediaSource: MediaIndexResponse = { sourceValues: [] }
+  private itemIndex = 0
+  private totalMatches = 0
 
   private get tags(): string {
     return dataDisplayer.tagsString(this.searchItem)
@@ -176,26 +200,60 @@ export default class SingleItem extends Vue {
     return this.searchItem.id.length > 0
   }
 
+  private previousItem(): void {
+    let newIndex = this.itemIndex - 1
+    if (newIndex < 1) {
+      newIndex = this.totalMatches
+    }
+    this.invokePage(newIndex)
+  }
+
+  private nextItem(): void {
+    let newIndex = this.itemIndex + 1
+    if (newIndex > this.totalMatches) {
+      newIndex = 1
+    }
+    this.invokePage(newIndex)
+  }
+
   private toggleShowMediaSource() {
     this.showMediaSource = !this.showMediaSource
   }
 
-  private mounted() {
+  private invokePage(indexNumber: number) {
+    const searchRequest = searchRouteBuilder.toSearchRequest(this.$route.query, 's')
+    const params = searchRouteBuilder.toPrimaryParameters(searchRequest)
+    params.i = indexNumber.toString()
+    this.$router.push({ path: "/singleitem", query: params })
+  }
+
+  private invokeSearch(query: any) {
     this.searchItem.id = ''
 
-    const query = this.$route.query
     const searchRequest = searchRouteBuilder.toSearchRequest(query, 's')
     searchRequest.properties = SingleItem.QueryProperties +
       ',' + SingleItem.CameraProperties +
       ',' + SingleItem.ImageProperties
     searchRequest.pageCount = 1
     searchRequest.drilldown = ''
+
     searchService.searchCallback(searchRequest, (results?: SearchResults, message?: string) => {
       if (results && results.totalMatches > 0) {
         this.searchItem = results.groups[0].items[0]
+        this.totalMatches = results.totalMatches
+        this.itemIndex = searchRequest.first
         this.getMediaSource()
       }
     })
+  }
+
+  @Watch('$route')
+  private onRouteChanged(to: any, from: any) {
+    this.invokeSearch(to.query)
+  }
+
+  private mounted() {
+    this.invokeSearch(this.$route.query)
   }
 
   private getMediaSource() {
@@ -218,7 +276,11 @@ export default class SingleItem extends Vue {
 }
 .centered-image {
   display: block;
-  margin: 0 auto;
+}
+
+.media-container {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
 }
 .info-container {
   max-width: 78em;
@@ -303,5 +365,18 @@ export default class SingleItem extends Vue {
 .media-source-value {
   margin-right: 5px;
   display: inline;
+}
+.next-previous-group {
+  text-align: center;
+  margin-top: 0.6em;
+  margin-bottom: 0.5em;
+}
+.selected-item-next-previous {
+  font-size: 1em;
+  padding-top: 0.1em;
+  padding-bottom: 0.1em;
+  margin-right: 1em;
+  margin-bottom: 0.2em;
+  color: yellow;
 }
 </style>
