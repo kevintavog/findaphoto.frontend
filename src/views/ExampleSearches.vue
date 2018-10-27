@@ -34,6 +34,8 @@ export default class ExampleSearches extends Vue {
     new SearchHint('Everything from 2015 and 2016, using a range', 'date:[2015* TO date:2016*]'),
     new SearchHint('The placename is more than 10 meters from the location', 'cachedlocationdistancemeters:>10'),
     new SearchHint('Everything from outside of Washington state', 'statename:* AND NOT statename:Washington'),
+    new SearchHint('Keyword values with a space', 'keywords:"mount rainier"'),
+    new SearchHint('Search by path (2016\\2016-09-15 London) 🤢', 'path.value:1?2016?2016-09-15?London?*'),
     new SearchHint('WRONG!!! All trips from 2015 and 2016', 'keywords:trip AND date:[2015* TO date:2016*]'),
     new SearchHint('WRONG!!! Items with warnings', 'warnings'),
   ]
