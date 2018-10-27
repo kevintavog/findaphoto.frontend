@@ -65,8 +65,14 @@
                     {{currentItemMarkerIndex + 1}} of {{totalMatches}}
                   </div>
 
-                  <img v-if="selectedItem.width >= selectedItem.height" class="info-image info-image-landscape" v-bind:src="selectedItem.slideUrl" >
-                  <img v-if="selectedItem.width < selectedItem.height" class="info-image info-image-portrait" v-bind:src="selectedItem.slideUrl" >
+                  <span v-if="selectedItem.mediaType == 'image'">
+                      <img v-if="selectedItem.width >= selectedItem.height" class="info-image info-image-landscape" v-bind:src="selectedItem.slideUrl" >
+                      <img v-if="selectedItem.width < selectedItem.height" class="info-image info-image-portrait" v-bind:src="selectedItem.slideUrl" >
+                  </span>
+                  <div v-if="selectedItem.mediaType == 'video'" >
+                    <video v-if="selectedItem.width >= selectedItem.height" class="info-image info-image-landscape" controls autoplay :src="selectedItem.mediaUrl" />
+                    <video v-if="selectedItem.width < selectedItem.height" class="info-image info-image-portrait" controls autoplay :src="selectedItem.mediaUrl" />
+                  </div>
 
                   <div class="c-paragraph">
                     <font-awesome-icon icon="file"/>
@@ -117,7 +123,7 @@ import 'leaflet.markercluster'
     },
 })
 export default class Map extends Vue {
-    private static defaultMarkerWidthAndHeight = 50
+    private static defaultMarkerWidthAndHeight = 75
     private static defaultSearchDistanceKm = 5
     private static locationPageSize = 100
 
@@ -125,7 +131,7 @@ export default class Map extends Vue {
     private searchBarVisible = false
     private searchType = 'l'
     private queryProperties: string = 'createdDate,height,id,imageName,latitude' +
-        ',longitude,locationDisplayName,path,slideUrl,thumbUrl,width'
+        ',longitude,locationDisplayName,mediaType,mediaUrl,path,slideUrl,thumbUrl,width'
     private map?: L.Map
     private cluster?: L.MarkerClusterGroup
     private southWestCornerLatLng: L.LatLngTuple = [90, 180]

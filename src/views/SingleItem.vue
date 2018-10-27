@@ -11,6 +11,9 @@
             <img class="o-image centered-image" :src="searchItem.slideUrl" />
           </a>
         </div>
+        <div v-if="searchItem.mediaType == 'video'" >
+            <video class="o-image centered-image" controls autoplay :src="searchItem.mediaUrl" />
+        </div>
 
         <br>
 
