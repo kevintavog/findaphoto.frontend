@@ -6,6 +6,7 @@ import store from '@/store/store'
 import { SearchRequest } from '@/models/SearchRequest'
 
 class SearchService {
+  private static baseServerUrl = process.env.NODE_ENV === 'production' ? 'http://jupiter/findaphoto/' : '/'
 
   // Goto the 1-based page number
   public gotoPage(pageNumber: number) {
@@ -25,7 +26,7 @@ class SearchService {
     axios.get(this.buildSearchUrl(request))
       .then((response) => {
         const results = response.data as SearchResults
-        callback(results, undefined)
+        callback(this.patchServerUrls(results), undefined)
       })
       .catch((error) => {
         callback(undefined, this.getErrorMessage(error))
@@ -38,7 +39,7 @@ class SearchService {
     axios.get(this.buildSearchUrl(request))
       .then((response) => {
         const results = response.data as SearchResults
-        store.commit('setServerResults', [results, request ])
+        store.commit('setServerResults', [this.patchServerUrls(results), request ])
       })
       .catch((error) => {
         store.commit('setServerError', this.getErrorMessage(error))
@@ -46,7 +47,7 @@ class SearchService {
   }
 
   public indexStats(properties: string, callback: (response?: IndexResponse) => void) {
-    axios.get('/api/index?properties=' + properties)
+    axios.get(SearchService.baseServerUrl + 'api/index?properties=' + properties)
       .then((response) => {
         callback(response.data as IndexResponse)
       })
@@ -62,7 +63,7 @@ class SearchService {
       request?: SearchRequest,
       maxCount?: number) {
 
-    let url = '/api/index/fieldvalues?fields=' + fieldNames.join(',')
+    let url = SearchService.baseServerUrl + 'api/index/fieldvalues?fields=' + fieldNames.join(',')
     if (maxCount) {
       url += '&max=' + maxCount
     }
@@ -81,7 +82,7 @@ class SearchService {
   }
 
   public mediaSource(id: string, callback: (response?: MediaIndexResponse) => void) {
-    axios.get('/api/media/' + id)
+    axios.get(SearchService.baseServerUrl + 'api/media/' + id)
       .then((response) => {
         const values = this.objectToSourceNameValues(response.data as SourceNameValueIndexResponse[], '')
         callback({ sourceValues: values})
@@ -144,7 +145,8 @@ class SearchService {
   private buildSearchUrl(request: SearchRequest) {
     switch (request.searchType) {
       case 's':
-        let surl = '/api/search?' + this.buildQueryParams(request) + '&first=' + request.first + '&count='
+        let surl = SearchService.baseServerUrl + 'api/search?' + this.buildQueryParams(request)
+          + '&first=' + request.first + '&count='
           + request.pageCount + '&properties='
           + request.properties + '&categories=keywords,tags,placename,date'
         if (request.drilldown !== undefined && request.drilldown.length > 0) {
@@ -153,8 +155,8 @@ class SearchService {
         return surl
 
       case 'd':
-        let durl = '/api/by-day?' + this.buildQueryParams(request) + '&first='
-          + request.first + '&count=' + request.pageCount + '&properties='
+        let durl = SearchService.baseServerUrl + 'api/by-day?' + this.buildQueryParams(request)
+          + '&first=' + request.first + '&count=' + request.pageCount + '&properties='
           + request.properties + '&categories=keywords,tags,placename,year'
         if (request.drilldown !== undefined && request.drilldown.length > 0) {
           durl += '&drilldown=' + request.drilldown
@@ -162,8 +164,8 @@ class SearchService {
         return durl
 
       case 'l':
-        let lurl = '/api/nearby?' + this.buildQueryParams(request) + '&first='
-          + request.first + '&count=' + request.pageCount + '&properties='
+        let lurl = SearchService.baseServerUrl + 'api/nearby?' + this.buildQueryParams(request)
+          + '&first=' + request.first + '&count=' + request.pageCount + '&properties='
           + request.properties + '&categories=keywords,tags,date'
         if (request.maxKilometers > 0) {
           lurl += '&maxKilometers=' + request.maxKilometers
@@ -175,6 +177,27 @@ class SearchService {
     }
 
     throw new Error('Unhandled searchType: ' + request.searchType)
+  }
+
+  private patchServerUrls(results: SearchResults): SearchResults {
+    if (SearchService.baseServerUrl === '/') {
+      return results
+    }
+
+    for (const g of results.groups) {
+      for (const i of g.items) {
+        if (i.mediaUrl) {
+          i.mediaUrl = SearchService.baseServerUrl + i.mediaUrl.slice(1)
+        }
+        if (i.slideUrl) {
+          i.slideUrl = SearchService.baseServerUrl + i.slideUrl.slice(1)
+        }
+        if (i.thumbUrl) {
+          i.thumbUrl = SearchService.baseServerUrl + i.thumbUrl.slice(1)
+        }
+      }
+    }
+    return results
   }
 }
 

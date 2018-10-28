@@ -227,7 +227,7 @@ export default class SingleItem extends Vue {
     const searchRequest = searchRouteBuilder.toSearchRequest(this.$route.query, 's')
     const params = searchRouteBuilder.toPrimaryParameters(searchRequest)
     params.i = indexNumber.toString()
-    this.$router.push({ path: "/singleitem", query: params })
+    this.$router.push({ path: '/singleitem', query: params })
   }
 
   private invokeSearch(query: any) {

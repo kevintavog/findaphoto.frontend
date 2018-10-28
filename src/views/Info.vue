@@ -130,8 +130,6 @@ export default class Info extends Vue {
   private getValuesForField(fieldName: string) {
     this.$store.commit('getFieldValues', fieldName)
   }
-
-
 }
 
 </script>
