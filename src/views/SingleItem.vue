@@ -7,11 +7,11 @@
     <div v-if="hasSearchItem">
       <div class="next-previous-group">
         <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
-              @click="previousItem" >
+              @click="earlierItem" >
             <font-awesome-icon icon="arrow-left"/>
         </button>
         <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
-              @click="nextItem" >
+              @click="laterItem" >
             <font-awesome-icon icon="arrow-right"/>
         </button>
         {{itemIndex}} of {{totalMatches}}
@@ -166,11 +166,11 @@
 
   <div class="next-previous-group">
     <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
-          @click="previousItem" >
+          @click="earlierItem" >
         <font-awesome-icon icon="arrow-left"/>
     </button>
     <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
-          @click="nextItem" >
+          @click="laterItem" >
         <font-awesome-icon icon="arrow-right"/>
     </button>
     {{itemIndex}} of {{totalMatches}}
@@ -212,7 +212,7 @@ export default class SingleItem extends Vue {
     return this.searchItem.id.length > 0
   }
 
-  private previousItem(): void {
+  private laterItem(): void {
     let newIndex = this.itemIndex - 1
     if (newIndex < 1) {
       newIndex = this.totalMatches
@@ -220,7 +220,7 @@ export default class SingleItem extends Vue {
     this.invokePage(newIndex)
   }
 
-  private nextItem(): void {
+  private earlierItem(): void {
     let newIndex = this.itemIndex + 1
     if (newIndex > this.totalMatches) {
       newIndex = 1
