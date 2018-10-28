@@ -39,8 +39,8 @@
                     </div>
                     <div class="result-set-info-text-left o-grid__cell c-text">
                         <font-awesome-icon class="info-icon" icon="tags"/>
-                        <span v-for="k in searchItem.keywords" :key="k">
-                          <router-link :to="{ path: '/search', query: { q: 'keywords:' + k } }" >{{k}}</router-link>,
+                        <span v-for="k in searchItem.keywords" :key="k" class="item-keyword">
+                          <router-link :to="{ path: '/search', query: { q: 'keywords:' + k } }" >{{k}}</router-link>
                         </span>
                     </div>
                 </div>
@@ -382,4 +382,8 @@ export default class SingleItem extends Vue {
   margin-bottom: 0.2em;
   color: yellow;
 }
+.item-keyword {
+  margin-right: 0.4em;
+}
+
 </style>

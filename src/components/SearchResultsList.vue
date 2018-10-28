@@ -32,7 +32,6 @@
             <div v-for="item in group.items" :key="item.id" class="group-item">
 
               <div class="group-item-thumbnail">
-                <!-- TODO: In order for slideshow to work, overall search index is needed (group index + item index) -->
                 <router-link :to="{ path: 'singleitem', query: singleItemParams(group, item)}">
                   <img :src="item.thumbUrl" >
                 </router-link>
@@ -41,21 +40,23 @@
               <div class="group-item-info">
                 <div class="o-grid">
                   <div class="group-item-info-text-left o-grid__cell c-text" >{{item.imageName}}</div>
-                  <div class="group-item-info-text-right o-grid__cell c-text">
-                          {{item.city}}
-                      <!-- <a [routerLink]="['/bylocation']" [queryParams]="{ lat:item.latitude, lon:item.longitude }">
-                          {{item.city}}
-                      </a> -->
+                  <div v-if="item.city" class="group-item-info-text-right o-grid__cell c-text">
+                    <router-link :to="{ path: '/map', query: { lat: item.latitude, lon: item.longitude } }" >
+                      {{item.city}}
+                    </router-link>
                   </div>
                 </div>
                 <div class="o-grid">
                   <div class="group-item-info-text-left o-grid__cell c-text">
-                          {{displayer.getItemLocaleDate(item)}}
-                      <!-- <a [routerLink]="['/byday']" [queryParams]="{ m:displayer.itemMonth(item), d:displayer.itemDay(item) }">
-                          {{displayer.getItemLocaleDate(item)}}
-                      </a> -->
+                    <router-link :to="{ path: '/byday', query: { m: displayer.itemMonth(item), d: displayer.itemDay(item) } }" >
+                      {{displayer.getItemLocaleDate(item)}}
+                    </router-link>
                   </div>
-                  <div class="group-item-info-text-right o-grid__cell c-text">{{displayer.keywordsString(item)}}</div>
+                  <div class="group-item-info-text-right o-grid__cell c-text">
+                    <span v-for="k in item.keywords" :key="k" class="item-keyword">
+                      <router-link :to="{ path: '/search', query: { q: 'keywords:' + k } }" >{{k}}</router-link>
+                    </span>
+                  </div>
                 </div>
                 <div class="o-grid" v-if="showDistance">
                   <div> {{displayer.getItemDistanceString(item)}} </div>
@@ -216,5 +217,8 @@ export default class SearchResultsList extends Vue {
   text-align: right;
   margin: 0 0 0 10px;
   padding: 0 3px 0 0;
+}
+.item-keyword {
+  margin-left: 0.4em;
 }
 </style>
