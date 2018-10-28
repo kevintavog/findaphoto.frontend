@@ -121,8 +121,17 @@
                       </div>
                   </div>
 
-              </div>
+                  <div v-if="searchItem.warnings != undefined">
+                      <br>
+                      <div class="c-card c-card--secondary warnings-container">
+                          <div class="c-card__content c-card__content--divider">Warnings:</div>
+                          <div class="c-card__content c-alert c-alert--warning" v-for="(warning, index) in searchItem.warnings" :key="warning">
+                            {{index + 1}}) {{warning}}
+                          </div>
+                      </div>
+                  </div>
 
+              </div>
           </div>
      </div>
     </div>
@@ -384,6 +393,10 @@ export default class SingleItem extends Vue {
 }
 .item-keyword {
   margin-right: 0.4em;
+}
+.warnings-container {
+  padding: 0.3em;
+  background-color:#404040;
 }
 
 </style>
