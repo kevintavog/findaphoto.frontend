@@ -2,30 +2,36 @@
    <div class="field-values">
     <SearchBar page="field-values" :search-type="searchType" :query-properties="queryProperties" />
 
-    <div class="field-values-container">
-      <h1>Field values {{currentSearch}}
+    <section class="hero is-primary has-background-grey-darker field-values-container">
+      <h1 class="title">Field values {{currentSearch}}
       </h1>
-      There are {{searchResults.totalMatches}} matching items.
+      <h2 class="subtitle"> There are {{searchResults.totalMatches}} matching items.
+      </h2>
 
-      <div v-for="nv in namesAndValues" :key="nv.fieldName">
-        <h3 v-if="nv.showValues" class="field-panel" @click="toggleShowValues(nv)" >
-          <div> 
-            {{nv.readableName + '  (' + nv.values.length + ')'}}
+      <nav class="level-item field-value-item" v-for="nv in namesAndValues" :key="nv.fieldName">
+        <div v-if="nv.showValues" class="field-panel" @click="toggleShowValues(nv)" >
+          <div>
+            {{nv.readableName}} 
+            <b-tag class="is-rounded is-medium field-unique-count">{{nv.values.length}} </b-tag>
             <font-awesome-icon icon="caret-down"/>
           </div>
-          <div v-for="v in nv.values" :key="v.value" class="field-value-info" >
-            {{v.value}} ({{v.count}})
-          </div>
-        </h3>
+          <b-taglist class="field-value-list">
+            <b-tag v-for="v in nv.values" :key="v.value" class="is-medium field-value-info" >
+              {{v.value}} 
+              <b-tag class="is-rounded is-medium field-value-count"> {{v.count}} </b-tag>
+            </b-tag>
+          </b-taglist>
+        </div>
 
-        <h3 v-else class="field-panel" @click="toggleShowValues(nv)" >
+        <div v-else class="field-panel" @click="toggleShowValues(nv)" >
           <div> 
-            {{nv.readableName + '  (' + nv.values.length + ')'}}
+            {{nv.readableName}} 
+            <b-tag class="is-rounded is-medium field-unique-count">{{nv.values.length}} </b-tag>
             <font-awesome-icon icon="caret-right"/>
           </div>
-        </h3>
-      </div>
-    </div>
+        </div>
+      </nav>
+    </section>
 
   </div>
 </template>
@@ -164,7 +170,9 @@ export default class FieldValues extends Vue {
 }
 
 .field-values-container {
-  margin-left: 1em;
+  margin-top: 1em;
+  padding-left: 0.5em;
+  padding-top: 0.5em;
 }
 
 .field-panel {
@@ -174,12 +182,31 @@ export default class FieldValues extends Vue {
   cursor: pointer;
 }
 
+.field-unique-count {
+  margin-right: 0.5em;
+  margin-bottom: 0.3em;
+  background: #585858;
+  color: white;
+}
+
+.field-value-list {
+  margin-left: 2em;
+}
+
+.field-value-item {
+  justify-content: inherit;
+}
+
 .field-value-info {
-  background: #484848;
-  float: left;
-  margin-bottom: 10px;
-  margin-right: 10px;
-  padding: 10px 10px 10px 10px;
-  cursor: auto;
+  background: hsl(207, 77%, 45%);
+  color: white;
+  padding-top: 1.6em;
+  padding-bottom: 1.2em;
+}
+
+.field-value-count {
+  background: #000058;
+  color: white;
+  margin-left: 10px;
 }
 </style>
