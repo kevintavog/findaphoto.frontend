@@ -149,23 +149,33 @@ export default class App extends Vue {
 }
 @import "../node_modules/leaflet/dist/leaflet.css";
 
-html {
+.main-html {
   height: 100vh;
   margin: 0;
+  background-color: #202020;
 }
 
 body {
-  background-color: #202020;
   height: 100vh;
   margin: 0;
 }
 
-a {
-  color: white;
-}
 a:visited {
   color: white;
 }
+
+a:hover {
+  color: white;
+}
+
+a:link {
+  color: white;
+}
+
+.overrideHoverColor a:hover {
+    color: white;
+}
+
 </style>
 
 
