@@ -20,6 +20,7 @@
     </div>
 
     <Paging/>
+    <ResultsFilter />
 
     <!-- Search results, by group -->
     <div v-for="group in results.groups" :key="group.name" >
@@ -78,16 +79,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { SearchRequest } from '@/models/SearchRequest'
 import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 import { dataDisplayer } from '@/providers/DataDisplayerProvider'
 import { SearchGroup, SearchResults, SearchItem } from '@/models/SearchResults'
 import Paging from '@/components/Paging.vue'
+import ResultsFilter from '@/components/ResultsFilter.vue'
 
 @Component({
   components: {
     Paging,
+    ResultsFilter,
   },
 })
 

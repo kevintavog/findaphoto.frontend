@@ -2,23 +2,23 @@
   <div class="paging o-container o-container--medium" v-if="serverResponse.results && totalPages > 0">
     <nav class="c-pagination">
 
-      <button class="c-pagination__control enabled_color" @click="firstPage()" v-if="currentPage > 1" > <font-awesome-icon icon="fast-backward"/> </button>
-      <button class="c-pagination__control enabled_color" @click="gotoPage(currentPage - 1)" v-if="currentPage > 1" > <font-awesome-icon icon="caret-left"/> </button>
+      <button class="c-pagination__control enabled-color" @click="firstPage()" v-if="currentPage > 1" > <font-awesome-icon icon="fast-backward"/> </button>
+      <button class="c-pagination__control enabled-color" @click="gotoPage(currentPage - 1)" v-if="currentPage > 1" > <font-awesome-icon icon="caret-left"/> </button>
       <button class="c-pagination__control" disabled="true" v-if="currentPage <= 1" > <font-awesome-icon icon="fast-backward"/> </button>
       <button class="c-pagination__control" disabled="true" v-if="currentPage <= 1" > <font-awesome-icon icon="caret-left"/> </button>
 
       <div class="c-pagination__pages">
-        <button class="c-pagination__control enabled_color" v-if="currentPage > 3" @click="gotoPage(currentPage - 3)" >{{currentPage - 3}}</button>
-        <button class="c-pagination__control enabled_color" v-if="currentPage > 2" @click="gotoPage(currentPage - 2)" >{{currentPage - 2}}</button>
-        <button class="c-pagination__control enabled_color" v-if="currentPage > 1" @click="gotoPage(currentPage - 1)" >{{currentPage - 1}}</button>
-        <button class="c-pagination__control enabled_color" aria-current="page">{{currentPage}} </button>
-        <button class="c-pagination__control enabled_color" v-if="currentPage < totalPages" @click="gotoPage(currentPage + 1)" >{{currentPage + 1}}</button>
-        <button class="c-pagination__control enabled_color" v-if="currentPage < totalPages - 1" @click="gotoPage(currentPage + 2)" >{{currentPage + 2}}</button>
-        <button class="c-pagination__control enabled_color" v-if="currentPage < totalPages - 2" @click="gotoPage(currentPage + 3)" >{{currentPage + 3}}</button>
+        <button class="c-pagination__control enabled-color" v-if="currentPage > 3" @click="gotoPage(currentPage - 3)" >{{currentPage - 3}}</button>
+        <button class="c-pagination__control enabled-color" v-if="currentPage > 2" @click="gotoPage(currentPage - 2)" >{{currentPage - 2}}</button>
+        <button class="c-pagination__control enabled-color" v-if="currentPage > 1" @click="gotoPage(currentPage - 1)" >{{currentPage - 1}}</button>
+        <button class="c-pagination__control enabled-color" aria-current="page">{{currentPage}} </button>
+        <button class="c-pagination__control enabled-color" v-if="currentPage < totalPages" @click="gotoPage(currentPage + 1)" >{{currentPage + 1}}</button>
+        <button class="c-pagination__control enabled-color" v-if="currentPage < totalPages - 1" @click="gotoPage(currentPage + 2)" >{{currentPage + 2}}</button>
+        <button class="c-pagination__control enabled-color" v-if="currentPage < totalPages - 2" @click="gotoPage(currentPage + 3)" >{{currentPage + 3}}</button>
       </div>
 
-      <button class="c-pagination__control enabled_color" @click="gotoPage(currentPage + 1)" v-if="currentPage < totalPages" > <font-awesome-icon icon="caret-right"/> </button>
-      <button class="c-pagination__control enabled_color" @click="lastPage()" v-if="currentPage < totalPages" > <font-awesome-icon icon="fast-forward"/> </button>
+      <button class="c-pagination__control enabled-color" @click="gotoPage(currentPage + 1)" v-if="currentPage < totalPages" > <font-awesome-icon icon="caret-right"/> </button>
+      <button class="c-pagination__control enabled-color" @click="lastPage()" v-if="currentPage < totalPages" > <font-awesome-icon icon="fast-forward"/> </button>
       <button class="c-pagination__control" disabled="true" v-if="currentPage >= totalPages" > <font-awesome-icon icon="caret-right"/> </button>
       <button class="c-pagination__control" disabled="true" v-if="currentPage >= totalPages" > <font-awesome-icon icon="fast-forward"/> </button>
     </nav>
@@ -86,7 +86,7 @@ export default class Paging extends Vue {
 </script>
 
 <style scoped>
-.enabled_color {
+.enabled-color {
   color: white;
 }
 </style>

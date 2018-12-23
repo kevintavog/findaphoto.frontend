@@ -75,6 +75,10 @@ export class SearchRouteBuilder {
             }
         }
 
+        if ('drilldown' in properties) {
+            searchRequest.drilldown = properties.drilldown
+        }
+
         return searchRequest
     }
 

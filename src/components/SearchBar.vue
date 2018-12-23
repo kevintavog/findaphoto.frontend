@@ -34,9 +34,9 @@ export default class SearchBar extends Vue {
 
   private onSearch(): void {
     // Only update on a change
-    if (this.resultsSearchText === undefined || this.resultsSearchText !== this.typedText) {
+    if (!this.resultsSearchText || this.resultsSearchText !== this.typedText) {
       // Rather than search directly, update the URL, which will indirectly invoke onRouteChanged
-      // This will add the searches to the browser history
+      // This will add the search to the browser history
       const searchRequest = this.$store.state.serverRequest.request
       searchRequest.first = 1
       searchRequest.searchType = this.searchType
