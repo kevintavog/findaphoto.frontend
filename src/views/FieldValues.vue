@@ -8,13 +8,19 @@
       <h2 class="subtitle"> There are {{searchResults.totalMatches}} matching items.
       </h2>
 
-      <nav class="level-item field-value-item" v-for="nv in namesAndValues" :key="nv.fieldName">
-        <div v-if="nv.showValues" class="field-panel" @click="toggleShowValues(nv)" >
-          <div>
+      <b-collapse class="card field-value-item" v-for="nv in namesAndValues" :key="nv.fieldName" :open="false" >
+        <div slot="trigger" slot-scope="props" class="card-header" >
+          <span class="card-header-title field-value-title">
             {{nv.readableName}} 
             <b-tag class="is-rounded is-medium field-unique-count">{{nv.values.length}} </b-tag>
-            <font-awesome-icon icon="caret-down"/>
-          </div>
+          </span>
+          <a class="card-header-icon">
+            <b-icon :icon="props.open ? 'caret-down' : 'caret-up'">
+            </b-icon>
+          </a>
+        </div>
+
+        <div class="card-content">
           <b-taglist class="field-value-list">
             <b-tag v-for="v in nv.values" :key="v.value" class="is-medium field-value-info" >
               {{v.value}} 
@@ -23,14 +29,8 @@
           </b-taglist>
         </div>
 
-        <div v-else class="field-panel" @click="toggleShowValues(nv)" >
-          <div> 
-            {{nv.readableName}} 
-            <b-tag class="is-rounded is-medium field-unique-count">{{nv.values.length}} </b-tag>
-            <font-awesome-icon icon="caret-right"/>
-          </div>
-        </div>
-      </nav>
+      </b-collapse>
+
     </section>
 
   </div>
@@ -74,11 +74,14 @@ export default class FieldValues extends Vue {
     countryname: 'Country',
     displayname: 'Display name',
     durationseconds: 'Duration seconds',
+    exposureprogram: 'Exposure program',
     exposuretimestring: 'Exposure time',
+    fnumber: 'F number',
     focallengthmm: 'Focal length',
     hierarchicalname: 'Hierarchical name',
     iso: 'ISO',
     keywords: 'Keywords',
+    lensinfo: 'Lens info',
     lensmodel: 'Lens model',
     placename: 'Place name',
     sitename: 'Site name',
@@ -91,8 +94,8 @@ export default class FieldValues extends Vue {
   private currentSearch = ''
   private namesAndValues: NamesAndValues[] = []
   private fieldNames = ['aperture', 'cameramake', 'cameramodel', 'cityname', 'countryname', 'displayname',
-    'durationseconds', 'exposuretimestring', 'focallengthmm', 'hierarchicalname',
-    'iso', 'keywords', 'lensmodel', 'placename', 'sitename', 'statename', 'tags']
+    'durationseconds', 'exposureprogram', 'exposuretimestring', 'fnumber', 'focallengthmm', 'hierarchicalname',
+    'iso', 'keywords', 'lensinfo', 'lensmodel', 'placename', 'sitename', 'statename', 'tags']
 
 
   private invokeSearchService(query: any): void {
@@ -183,18 +186,20 @@ export default class FieldValues extends Vue {
 }
 
 .field-unique-count {
-  margin-right: 0.5em;
-  margin-bottom: 0.3em;
-  background: #585858;
+  margin-left: 0.5em;
+  background-color: #585858;
   color: white;
 }
 
-.field-value-list {
-  margin-left: 2em;
+.field-value-title {
+  color: white;
 }
 
 .field-value-item {
   justify-content: inherit;
+  background-color: #404040;
+  color: white;
+  padding-left: 0.3em;
 }
 
 .field-value-info {

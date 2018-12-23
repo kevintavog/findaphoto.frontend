@@ -25,9 +25,24 @@
           </div>
           <div class="c-card__body">
             <ul class="main-menu-items-list">
-              <li class=""> <router-link to="/info"> <font-awesome-icon class="menu-icon" icon="info"/> Info </router-link> </li>
-              <li class=""> <router-link to="/example-searches"> <font-awesome-icon class="menu-icon" icon="search"/> Example searches </router-link> </li>
-              <li class="" @click="navigateToFieldValues()"> <font-awesome-icon class="menu-icon" icon="map-signs"/> Field values </li>
+              <li class=""> 
+                <router-link to="/info"> 
+                  <font-awesome-icon class="menu-icon" icon="info"/> 
+                  Info 
+                </router-link> 
+              </li>
+              <li class=""> 
+                <router-link to="/example-searches"> 
+                  <font-awesome-icon class="menu-icon" icon="search"/> 
+                  Example searches 
+                </router-link> 
+              </li>
+              <li class=""> 
+                <router-link :to="{ path: '/field-values', query: fieldValuesParams()}"> 
+                  <font-awesome-icon class="menu-icon" icon="map-signs"/> 
+                  Field values 
+                </router-link> 
+              </li>
             </ul>
           </div>
         </div>
@@ -117,15 +132,12 @@ export default class App extends Vue {
     }
   }
 
-  private navigateToFieldValues() {
+  private fieldValuesParams() {
     const searchRequest = this.$store.state.serverRequest.request
     if (searchRequest.searchType.length > 0) {
-      this.$router.push({
-        path: '/field-values',
-        query: searchRouteBuilder.toPrimaryParameters(searchRequest),
-      })
+      return searchRouteBuilder.toPrimaryParameters(searchRequest)
     } else {
-      this.$router.push({ path: '/field-values' })
+      return {}
     }
   }
 
@@ -173,7 +185,7 @@ a:link {
 }
 
 .overrideHoverColor a:hover {
-    color: white;
+  color: white;
 }
 
 </style>
