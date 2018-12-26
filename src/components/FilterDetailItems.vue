@@ -1,5 +1,5 @@
 <template>
-  <ul :class="isHierarchical ? 'filter-detail-items-is-child' : 'filter-detail-items-is-parent'" v-if="categories">
+  <ul :class="className" v-if="categories">
     <li class="single-item" v-for="(c, index) in categories" :key="c.categoryDetail.value">
       <font-awesome-icon class="single-item-icon" icon="caret-right" size="2x" v-if="hasChildren(c) && !open[index]" @click="toggleOpen(index)"/>
       <font-awesome-icon class="single-item-icon" icon="caret-down" size="2x" v-if="hasChildren(c) && open[index]" @click="toggleOpen(index)"/>
@@ -26,8 +26,14 @@ export default class FilterDetailItems extends Vue {
   @Prop() private parentCategory!: SelectedCategory
   @Prop() private isHierarchical!: boolean
 
-
   private open: boolean[] = []
+
+  private get className(): string {
+    if (this.isHierarchical) {
+      return this.parentCategory ? 'filter-detail-items-is-child' : 'filter-detail-items-is-parent'
+    }
+    return 'filter-detail-items-is-flat'
+  }
 
   private hasChildren(category: SelectedCategory): boolean {
     return category.children && category.children.length > 0
@@ -80,11 +86,16 @@ export default class FilterDetailItems extends Vue {
 
 .filter-detail-items-is-parent {
   list-style: none;
-  margin-left: -0.3em;
+  margin-left: 0.3em;
 }
 
+.filter-detail-items-is-flat {
+  list-style: none;
+  margin-left: 0.0em;
+}
+
+
 .single-item-icon {
-  margin-left: 0.5em;
   display: inline-block;
   align-items: center;
   cursor: pointer;
@@ -93,7 +104,6 @@ export default class FilterDetailItems extends Vue {
 }
 
 .single-item-icon-no-details {
-  margin-left: 0.65em;
   font-size: 1.5em;
   line-height: 1em;
   text-align: center;

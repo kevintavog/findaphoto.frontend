@@ -1,6 +1,6 @@
 <template>
   <div v-if="categories">
-    {{caption}}
+    <span class="filter-caption"> {{caption}} </span>
     <FilterDetailItems :categories="categories" :isHierarchical="isHierarchical" />
   </div>
 </template>
@@ -34,5 +34,10 @@ export default class FilterGroup extends Vue {
 
 
 <style scoped>
+
+.filter-caption {
+  font-weight: 600;
+  font-size: larger;
+}
 
 </style>
