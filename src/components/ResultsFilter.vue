@@ -3,7 +3,7 @@
     <b-collapse class="top-level-filter" :open="false">
       <button class="button is-info" slot="trigger">
         <span class="filter-text">Filter</span>
-        <b-icon icon="sliders-h"></b-icon>
+        <b-icon icon="sliders-h" />
       </button>
       <div class="notification filter-notification">
         <div class="columns content">

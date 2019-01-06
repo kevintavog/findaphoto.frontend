@@ -15,8 +15,7 @@
             <b-tag class="is-rounded is-medium field-unique-count">{{nv.values.length}} </b-tag>
           </span>
           <a class="card-header-icon">
-            <b-icon :icon="props.open ? 'caret-down' : 'caret-up'">
-            </b-icon>
+            <b-icon :icon="props.open ? 'caret-down' : 'caret-up'" />
           </a>
         </div>
 

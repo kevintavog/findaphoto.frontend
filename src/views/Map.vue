@@ -1,38 +1,50 @@
 <template>
   <div class="map box">
     <div class="controls">
-      <button v-if="searchBarVisible" class="c-button c-button--rounded c-button--ghost-success u-small control-button" @click="toggleSearchBar">
-          <font-awesome-icon icon="search"/>
-      </button>
-      <button v-if="!searchBarVisible" class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="toggleSearchBar">
-          <font-awesome-icon icon="search"/>
-      </button>
-      <button class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="fitToMap">
-          <font-awesome-icon icon="vector-square"/> Fit
-      </button>
-      <button class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="searchCenterOfMap">
-          <font-awesome-icon icon="bullseye"/> Near center
-      </button>
-      <button class="c-button c-button--rounded c-button--ghost-info u-small control-button" @click="searchNearby">
-          <font-awesome-icon icon="location-arrow"/> Nearby
-      </button>
+      <b-dropdown>
+        <button class="button has-background-black-bis has-text-primary" slot="trigger">
+            <b-icon icon="align-justify" />
+        </button>
+        <b-dropdown-item @click="toggleSearchBar">
+            <b-icon icon="search" />
+            <span> Toggle search bar </span>
+        </b-dropdown-item>
+        <b-dropdown-item @click="fitToMap">
+            <b-icon icon="vector-square" />
+            <span> Fit to map </span>
+        </b-dropdown-item>
+        <b-dropdown-item @click="searchCenterOfMap">
+            <b-icon icon="bullseye" />
+            <span> Search near center of map </span>
+        </b-dropdown-item>
+        <b-dropdown-item @click="searchNearby">
+            <b-icon icon="location-arrow" />
+            <span> Search nearby </span>
+        </b-dropdown-item>
 
-      <div v-if="!isLoading && totalMatches > 0">
-          <div class="loaded-message">
+      </b-dropdown>
+
+      <span v-if="!isLoading && totalMatches > 0" class="loaded-status">
+          <span class="loaded-message">
               {{totalMatches}} items {{readableSearchString}}
-          </div>
-      </div>
+          </span>
+      </span>
 
-      <div v-if="isLoading" class="loading-status">
-          <div style="clear: both;" />
-          <div class="loading-message">
-              Loading {{totalMatches}} items: 
-          </div>
-          <div class="c-progress c-progress--rounded u-small">
-            <div role="progressbar" aria-valuemin="0" aria-valuemax="100" 
+      <span v-if="!isLoading && totalMatches == 0" class="loaded-status">
+          <span class="loaded-message">
+              No matches {{readableSearchString}}
+          </span>
+      </span>
+
+      <span v-if="isLoading" class="loading-status">
+          <span class="loading-message">
+              Loading {{totalMatches}} items
+          </span>
+          <span class="c-progress c-progress--rounded u-small">
+            <span role="progressbar" aria-valuemin="0" aria-valuemax="100" 
                 v-bind:style="{ 'width': percentageLoadedWidth }" class="c-progress__bar c-progress__bar--info" />
-          </div>
-      </div>
+          </span>
+      </span>
       <div style="clear: both;" />
       <SearchBar v-if="searchBarVisible" page="map" :search-type="searchType" :query-properties="queryProperties" class="search-bar" />
 
@@ -56,11 +68,11 @@
                   <div>
                     <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
                           @click="previousItem" >
-                        <font-awesome-icon icon="arrow-left"/>
+                        <b-icon icon="arrow-left" />
                     </button>
                     <button type="button" class="c-button c-button--warning c-button--ghost c-button--rounded selected-item-next-previous" 
                           @click="nextItem" >
-                        <font-awesome-icon icon="arrow-right"/>
+                        <b-icon icon="arrow-right" />
                     </button>
                     {{currentItemMarkerIndex + 1}} of {{totalMatches}}
                   </div>
@@ -76,20 +88,20 @@
 
                   <div class="c-paragraph">
                     <a :href="selectedItem.mediaUrl">
-                        <font-awesome-icon icon="file"/>
+                        <b-icon icon="file" />
                         {{selectedItem.imageName}}
                     </a>
                   </div>
                   <div class="c-paragraph">
-                    <font-awesome-icon icon="folder"/>
+                    <b-icon icon="folder" />
                     {{displayer.parentFolder(selectedItem)}}
                   </div>
                   <div class="c-paragraph">
-                    <font-awesome-icon icon="calendar"/>
+                    <b-icon icon="calendar" />
                     {{displayer.getItemLocaleDateAndTime(selectedItem)}} 
                   </div>
                   <div class="c-paragraph">
-                    <font-awesome-icon icon="map-marker"/>
+                    <b-icon icon="map-marker" />
                     {{selectedItem.locationDisplayName}} 
                   </div>
 
@@ -425,11 +437,13 @@ a:link {
   display: flex;
   flex-flow: column;
   height: 100%;
+  padding: 0.1em 0.3em 0.3em 0.3em;
 }
 
 .controls {
+  z-index: 1000;
   text-align: left;
-  padding-top: 0.4em;
+  padding-top: 0em;
   padding-left: 0.3em;
   padding-right: 0.1em;
   padding-bottom: 0.3em;
@@ -439,19 +453,12 @@ a:link {
   margin-right: 0.8em;
 }
 
-.loading-status {
-  margin-top: 0.3em;
-  margin-bottom: 0.2em;
-}
-
 .loading-message {
-  float: left;
-  margin-right: 10px;
+  margin-left: 0.5em;
 }
 
 .loaded-message {
-  float: left;
-  margin-right: 10px;
+  margin-left: 0.5em;
 }
 
 .search-bar {
@@ -467,7 +474,7 @@ a:link {
 
 .map-content {
   flex-grow: 1;
-  height: 100%;
+  height: calc(100% - 2em);
 }
 
 .selected-item {
