@@ -398,10 +398,29 @@ export default class Map extends Vue {
   background-color: #090;
   color: white;
 }
+
+a:visited {
+  color: black;
+}
+
+a:hover {
+  color: black;
+}
+
+a:link {
+  color: black;
+}
+
+.overrideHoverColor a:hover {
+  color: black;
+}
+
 </style>
 
 <style scoped>
 .box {
+  background-color: #222;
+  color: white;
   flex-grow: 1;
   display: flex;
   flex-flow: column;
