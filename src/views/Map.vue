@@ -22,6 +22,14 @@
             <span> Search nearby </span>
         </b-dropdown-item>
 
+        <b-dropdown-item @click="isTrackModalActive = true">
+            <b-icon icon="map-marked" />
+            <span> Add GPS track (GPX) </span>
+        </b-dropdown-item>
+        <b-dropdown-item @click="clearAllTracks">
+            <b-icon icon="trash" />
+            <span> Remove tracks </span>
+        </b-dropdown-item>
       </b-dropdown>
 
       <span v-if="!isLoading && totalMatches > 0" class="loaded-status">
@@ -50,8 +58,12 @@
 
     </div>
 
+    <b-loading :active.sync="runningLongTask" />
 
     <div class="content-container">
+        <b-modal class="add-track" :active.sync="isTrackModalActive" scroll="keep" has-modal-card >
+            <ChooseLocalFile @fileadded="fileAdded" />
+        </b-modal>
         <main class="map-content" id="map" >
         </main>
 
@@ -116,7 +128,10 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator'
+import ChooseLocalFile from '@/components/ChooseLocalFile.vue'
 import SearchBar from '@/components/SearchBar.vue'
+import { GpxAnalyzer, GpxAnalyzerTrack } from '@/models/GpxAnalyzer'
+import { GpxFile, GpxParser, GpxSegment } from '@/models/Gpx'
 import { SearchRequest } from '@/models/SearchRequest'
 import { SearchItem, SearchResults, emptySearchItem } from '@/models/SearchResults'
 import { locationProvider, FPLocation } from '@/providers/LocationProvider'
@@ -125,9 +140,15 @@ import { searchService } from '@/services/SearchService'
 import { dataDisplayer } from '@/providers/DataDisplayerProvider'
 import L from 'leaflet'
 import 'leaflet.markercluster'
+import { setTimeout } from 'timers'
+
+class GpxFeatureGroup extends L.FeatureGroup {
+    public gpxLayer = true
+}
 
 @Component({
     components: {
+        ChooseLocalFile,
         SearchBar,
     },
     metaInfo() {
@@ -151,12 +172,21 @@ export default class Map extends Vue {
     private southWestCornerLatLng: L.LatLngTuple = [90, 180]
     private northEastCornerLatLng: L.LatLngTuple = [-90, -180]
     private markers: L.Marker[] = []
+
+    private mapLayersControl: L.Control.Layers | null = null
+
     private currentItem: SearchItem = emptySearchItem
     private currentItemMarkerIndex = 0
     private isLoading = false
     private totalMatches = 0
     private itemsRetrieved = 0
     private readableSearchString = ''
+
+    private runningLongTask = false
+
+    private isTrackModalActive = false
+    private addedFile: File | null = null
+    private trackDates: Array<[Date, Date]> = []
 
 
     private invokeSearchService(query: any): void {
@@ -296,7 +326,9 @@ export default class Map extends Vue {
     }
 
     private searchNearby(): void {
+        this.runningLongTask = true
         locationProvider.currentLocation((location?: FPLocation, errorMessage?: string) => {
+            this.runningLongTask = false
             if (errorMessage && errorMessage.length > 0) {
                 this.$store.commit('addErrorMessage', errorMessage)
             } else if (location) {
@@ -315,6 +347,135 @@ export default class Map extends Vue {
         searchRequest.first = 1
         this.$router.push({ path: 'map', query: searchRouteBuilder.toParameters(searchRequest) })
     }
+
+    private clearAllTracks(): void {
+        this.map!.eachLayer( (l) => {
+            if ((l as GpxFeatureGroup).gpxLayer === true) {
+                this.map!.removeLayer(l)
+            }
+        })
+
+        if (this.mapLayersControl) {
+            this.map!.removeControl(this.mapLayersControl)
+            this.mapLayersControl = null
+        }
+
+        this.trackDates = []
+    }
+
+    private searchOnTrackDates(): void {
+        const queries: string[] = []
+        for (const dates of this.trackDates) {
+            const first = this.toQueryableDate(dates[0])
+            const last = this.toQueryableDate(dates[1])
+
+            queries.push(`date:[${first} TO ${last}]`)
+        }
+
+        this.invokeSearchService({ t: 's', q: queries.join(' OR ') })
+    }
+
+    private toQueryableDate(date: Date): string {
+        return `${date.getUTCFullYear()}`
+            + `${String(date.getUTCMonth() + 1).padStart(2, '0')}`
+            + `${String(date.getUTCDate()).padStart(2, '0')}`
+    }
+
+    private fileAdded(file: File): void {
+        const reader = new FileReader()
+        reader.onloadend = (e: ProgressEvent) => {
+            const resultString = reader.result as string
+            if (resultString) {
+                // Either a GPX or GpxAnalyzer - look at the filename extension
+                switch (file.name.split('.').pop()) {
+                    case 'json':
+                        this.parseJsonGpxAnalyzer(resultString)
+                        break
+                    case 'gpx':
+                        this.parseGpx(resultString)
+                        break
+                }
+            }
+            this.runningLongTask = false
+        }
+
+        this.runningLongTask = true
+        setTimeout( () => reader.readAsText(file), 10)
+    }
+
+    private parseJsonGpxAnalyzer(contents: string) {
+        const gpx: GpxAnalyzer = JSON.parse(contents)
+        for (let idx = 0; idx < gpx.tracks.length; ++idx) {
+            this.addJsonTrack(gpx.tracks[idx], idx + 1)
+        }
+    }
+
+    private parseGpx(contents: string) {
+        new GpxParser().parse(contents, (error, gpxFile) => {
+            if (error || !gpxFile) {
+                this.$store.commit(`GPX parsing failed: ${error}`)
+            } else {
+                const [earliest, latest] = new GpxParser().dates(gpxFile)
+                this.trackDates.push([earliest, latest])
+
+                let trackNumber = 1
+                for (const track of gpxFile.tracks) {
+                    for (const segment of track.segments) {
+                        this.addGpxSegment(segment, trackNumber)
+                        trackNumber += 1
+                    }
+                }
+
+                this.map!.fitBounds([
+                    [gpxFile.bounds.minLat, gpxFile.bounds.minLon],
+                    [gpxFile.bounds.maxLat, gpxFile.bounds.maxLon]],
+                    undefined)
+
+                this.searchOnTrackDates()
+            }
+        })
+    }
+
+    private addGpxSegment(segment: GpxSegment, trackNumber: number) {
+        const runLatLngList = segment.points.map( (p) => {
+            return new L.LatLng(p.latitude, p.longitude)
+        })
+        const runLine = new L.Polyline(
+            runLatLngList,
+            { color: 'purple', weight: 3, dashArray: '', opacity: 1.0 })
+
+        const runLayer = new GpxFeatureGroup([runLine])
+        // (runLayer as any).gpxLayer = true
+        runLayer.addTo(this.map as L.Map)
+        this.addToMapLayersControl(runLayer, `#${trackNumber} runs`)
+    }
+
+    private addJsonTrack(track: GpxAnalyzerTrack, trackNumber: number): void {
+        const trackRuns: L.Polyline[] = []
+        for (const run of track.runs) {
+            const runLatLngList = run.points.map( (p) => {
+                return new L.LatLng(p.gpx.latitude, p.gpx.longitude)
+            })
+            const runLine = new L.Polyline(
+                runLatLngList,
+                { color: 'red', weight: 3, dashArray: '', opacity: 1.0 })
+            trackRuns.push(runLine)
+        }
+
+        const runLayer = new GpxFeatureGroup(trackRuns)
+        runLayer.addTo(this.map as L.Map)
+        this.addToMapLayersControl(runLayer, `#${trackNumber} runs`)
+    }
+
+    private addToMapLayersControl(layer: L.FeatureGroup, name: string) {
+        if (this.mapLayersControl == null) {
+            this.mapLayersControl = L.control.layers(
+                undefined, { [name]: layer }, { position: 'topright', collapsed: false }).addTo(this.map as L.Map)
+        } else {
+            this.mapLayersControl.addOverlay(layer, name)
+        }
+    }
+
 
     private initializeMap(): void {
         if (this.map) { return }
@@ -447,6 +608,10 @@ a:link {
   padding-left: 0.3em;
   padding-right: 0.1em;
   padding-bottom: 0.3em;
+}
+
+.add-track {
+  z-index: 1000;
 }
 
 .control-button {

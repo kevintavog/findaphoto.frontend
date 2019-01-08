@@ -15,7 +15,7 @@
 
 
 <script lang="ts">
-import { Component, Emit, Prop, Vue, Watch } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { SearchCategoryDetail } from '@/models/SearchResults'
 import { SelectedCategory } from '@/models/SelectedCategory'
 
