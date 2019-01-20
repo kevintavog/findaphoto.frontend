@@ -28,7 +28,10 @@
         <br>
 
         <div style="clear:both;" class="c-alert c-alert--warning" v-if="indexResponse.warningCount > 0" >
-          <font-awesome-icon class="info-icon" icon="exclamation-triangle"/> There are {{indexResponse.warningCount}} warning(s)
+          <router-link class="underline has-text-warning" :to="{ path: '/search', query: { q: 'warnings:*' } }" >
+            <b-icon icon="info" />
+            There are {{indexResponse.warningCount}} warning(s)
+          </router-link>
         </div>
       </h3>
 
@@ -185,4 +188,9 @@ export default class Info extends Vue {
   display: flex;
   flex-wrap: wrap;
 }
+
+.underline {
+  text-decoration: underline;
+}
+
 </style>

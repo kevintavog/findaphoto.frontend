@@ -9,45 +9,31 @@
       <li class="navigation-item" @click="navigateToByDay()"> <font-awesome-icon icon="calendar"/> By Day </li>
       <li class="navigation-item" @click="navigateToMap()"> <font-awesome-icon icon="map"/> Map </li>
 
-      <li class="navigation-item navigation-right" @click="toggleMenu()"> <font-awesome-icon icon="align-justify"/> </li>
+      <b-dropdown class="nav-menu navigation-item is-pulled-right is-right" postion="is-bottom-left" :mobile-modal="false">
+        <button id="nav-right-menu-button" class="button is-small is-text has-text-white" slot="trigger">
+          <b-icon icon="align-justify" />
+        </button>
+        <b-dropdown-item has-link>
+            <router-link to="/info"> 
+              <b-icon icon="info" />
+              Info 
+            </router-link> 
+        </b-dropdown-item>
+        <b-dropdown-item has-link>
+            <router-link to="/example-searches"> 
+              <b-icon icon="search" />
+              Example searches 
+            </router-link> 
+        </b-dropdown-item>
+        <b-dropdown-item has-link>
+            <router-link :to="{ path: '/field-values', query: fieldValuesParams()}"> 
+              <b-icon icon="map-signs" />
+              Field values 
+            </router-link> 
+        </b-dropdown-item>
+      </b-dropdown>
     </ul>
     <router-view/>
-
-    <div v-if="menuOpen" class="drop-down-menu-container" >
-      <div aria-hidden class="c-overlay c-overlay--dismissible"></div>
-      <aside aria-label="main menu" aria-expanded class="o-drawer u-highest o-drawer--right o-drawer--visible main-menu-drawer">
-        <div class="c-card">
-          <button class="menu-close-button" @click="toggleMenu()">
-            <font-awesome-icon icon="times"/>
-          </button>
-          <div class="c-heading">
-            Find A Photo
-          </div>
-          <div class="c-card__body">
-            <ul class="main-menu-items-list">
-              <li class=""> 
-                <router-link to="/info"> 
-                  <font-awesome-icon class="menu-icon" icon="info"/> 
-                  Info 
-                </router-link> 
-              </li>
-              <li class=""> 
-                <router-link to="/example-searches"> 
-                  <font-awesome-icon class="menu-icon" icon="search"/> 
-                  Example searches 
-                </router-link> 
-              </li>
-              <li class=""> 
-                <router-link :to="{ path: '/field-values', query: fieldValuesParams()}"> 
-                  <font-awesome-icon class="menu-icon" icon="map-signs"/> 
-                  Field values 
-                </router-link> 
-              </li>
-            </ul>
-          </div>
-        </div>
-      </aside>
-    </div>
 
   </div>
 </template>
@@ -222,9 +208,12 @@ a:link {
   line-height: 2em;
 }
 
-.navigation-right {
-  float: right;
-  margin-right: 0.5em;
+.nav-menu {
+  z-index: 2000;
+}
+
+#nav-right-menu-button:active, #nav-right-menu-button:focus {
+  background-color: transparent;
 }
 
 .main-menu-drawer {

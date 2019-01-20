@@ -2,7 +2,7 @@
   <div class="map box">
     <div class="controls">
       <b-dropdown>
-        <button class="button has-background-black-bis has-text-primary" slot="trigger">
+        <button class="button is-small is-text has-background-black-bis has-text-primary" slot="trigger">
             <b-icon icon="align-justify" />
         </button>
         <b-dropdown-item @click="toggleSearchBar">
@@ -611,7 +611,7 @@ a:link {
 }
 
 .add-track {
-  z-index: 1000;
+  z-index: 2000;
 }
 
 .control-button {

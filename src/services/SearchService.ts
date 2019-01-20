@@ -63,7 +63,7 @@ class SearchService {
       request?: SearchRequest,
       maxCount?: number) {
 
-    let url = SearchService.baseServerUrl + 'api/index/info/fieldvalues?fields=' + fieldNames.join(',')
+    let url = SearchService.baseServerUrl + 'api/index/fieldvalues?fields=' + fieldNames.join(',')
     if (maxCount) {
       url += '&max=' + maxCount
     }
