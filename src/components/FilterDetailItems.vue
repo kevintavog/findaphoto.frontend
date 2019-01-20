@@ -15,12 +15,78 @@
 
 
 <script lang="ts">
+import Vue from 'vue'
+import { SelectedCategory } from '@/models/SelectedCategory'
+
+// That stinks - apparently, using 'vue-property-descriptor' for recursive components in production doesn't work.
+// This is the same class, but using TypeScript directly.
+export default Vue.extend({
+    name: 'FilterDetailItems',
+    props: {
+      categories: Array as () => SelectedCategory[],
+      parentCategory: Object as () => SelectedCategory,
+      isHierarchical: Boolean,
+    },
+    data() {
+        return {
+            open: [] as boolean[],
+        }
+    },
+    mounted() {
+      for (const c of this.categories) {
+        this.open.push(c.selected)
+      }
+    },
+    methods: {
+        hasChildren(category: SelectedCategory): boolean {
+          return category.children && category.children.length > 0
+        },
+        toggleOpen(index: number) {
+          this.$set(this.open, index, !this.open[index])
+        },
+        selectionChanged(c: SelectedCategory) {
+          if (c.selected) {
+            this.selectParent(this.parentCategory)
+          } else {
+            this.deselectChildren(c.children)
+          }
+        },
+
+        selectParent(parent?: SelectedCategory) {
+            if (parent) {
+              parent.selected = true
+              this.selectParent(parent.parent)
+            }
+        },
+
+        deselectChildren(children: SelectedCategory[]) {
+            for (const child of children) {
+              child.selected = false
+              if (child.children && child.children.length > 0) {
+                this.deselectChildren(child.children)
+              }
+            }
+        },
+
+    },
+    computed: {
+        className(): string {
+          if (this.isHierarchical) {
+            return this.parentCategory ? 'filter-detail-items-is-child' : 'filter-detail-items-is-parent'
+          }
+          return 'filter-detail-items-is-flat'
+        },
+    },
+})
+
+/*
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { SearchCategoryDetail } from '@/models/SearchResults'
 import { SelectedCategory } from '@/models/SelectedCategory'
 
-
-@Component
+@Component({
+  name: 'FilterDetailItems',
+})
 export default class FilterDetailItems extends Vue {
   @Prop({ required: true }) private categories!: SelectedCategory[]
   @Prop() private parentCategory!: SelectedCategory
@@ -70,10 +136,11 @@ export default class FilterDetailItems extends Vue {
   }
 
   private toggleOpen(index: number) {
+    console.log(`toggle ${index}, currently: ${this.open[index]}`)
     this.$set(this.open, index, !this.open[index])
   }
 }
-
+*/
 </script>
 
 
@@ -110,7 +177,6 @@ export default class FilterDetailItems extends Vue {
 }
 
 .checkbox-item {
-  display: inline-block;
   margin-left: 0.5em;
   line-height: 2rem;
 }

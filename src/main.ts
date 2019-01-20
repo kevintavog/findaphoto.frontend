@@ -25,7 +25,6 @@ library.add(faAlignJustify, faAngleDown, faArrowLeft, faArrowRight, faBullseye,
 
 Vue.component('font-awesome-icon', fontawesome.FontAwesomeIcon)
 
-
 import Buefy from 'buefy'
 import 'buefy/dist/buefy.css'
 
