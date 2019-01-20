@@ -47,7 +47,7 @@ class SearchService {
   }
 
   public indexStats(properties: string, callback: (response?: IndexResponse) => void) {
-    axios.get(SearchService.baseServerUrl + 'api/index?properties=' + properties)
+    axios.get(SearchService.baseServerUrl + 'api/index/info?properties=' + properties)
       .then((response) => {
         callback(response.data as IndexResponse)
       })
@@ -63,7 +63,7 @@ class SearchService {
       request?: SearchRequest,
       maxCount?: number) {
 
-    let url = SearchService.baseServerUrl + 'api/index/fieldvalues?fields=' + fieldNames.join(',')
+    let url = SearchService.baseServerUrl + 'api/index/info/fieldvalues?fields=' + fieldNames.join(',')
     if (maxCount) {
       url += '&max=' + maxCount
     }
