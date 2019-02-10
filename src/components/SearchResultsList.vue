@@ -23,7 +23,7 @@
     <ResultsFilter />
 
     <!-- Search results, by group -->
-    <div v-for="group in results.groups" :key="group.name" >
+    <div v-for="(group,index) in results.groups" :key="group.name+index" >
       <div style="clear:both;"></div>
       <div class="group-outer-container">
         <div class="group-inner-container">

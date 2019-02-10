@@ -19,10 +19,10 @@
 
       <div >
         <div v-if="searchItem.mediaType === 'image'" class="media-container" >
-            <img class="o-image centered-image" :src="searchItem.slideUrl" />
+            <img class="centered-image" :src="searchItem.slideUrl" />
         </div>
         <div v-if="searchItem.mediaType == 'video'" class="media-container" >
-            <video class="o-image centered-image" controls autoplay :src="searchItem.mediaUrl" />
+            <video class="centered-image" controls autoplay :src="searchItem.mediaUrl" />
         </div>
 
         <br>
@@ -288,6 +288,10 @@ export default class SingleItem extends Vue {
 }
 .centered-image {
   display: block;
+  width: auto;
+  height: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .media-container {
