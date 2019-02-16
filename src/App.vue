@@ -171,7 +171,7 @@ a:link {
 }
 
 .overrideHoverColor a:hover {
-  color: white;
+  color: rgb(206, 206, 206);
 }
 
 </style>
