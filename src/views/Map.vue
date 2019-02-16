@@ -571,23 +571,9 @@ export default class Map extends Vue {
   background-color: #090;
   color: white;
 }
-
-a:visited {
-  color: black;
+.leaflet-bar, .leaflet-bar a {
+    background-color: #666;
 }
-
-a:hover {
-  color: black;
-}
-
-a:link {
-  color: black;
-}
-
-.overrideHoverColor a:hover {
-  color: black;
-}
-
 </style>
 
 <style scoped>
@@ -639,7 +625,7 @@ a:link {
 
 .map-content {
   flex-grow: 1;
-  height: calc(100% - 2em);
+  height: calc(100% - 3em);
 }
 
 .selected-item {
@@ -648,6 +634,9 @@ a:link {
 
 .selected-item-dialog {
   background-color: #606060;
+  width: 50%;
+  top: 30%;
+  left: 27%;
 }
 
 .info-image {
@@ -663,7 +652,7 @@ a:link {
 }
 
 .info-image-landscape {
-  max-width: 100%;
+  max-width: 50%;
   max-height: 50%;
 }
 
