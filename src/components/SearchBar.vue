@@ -49,10 +49,13 @@ export default class SearchBar extends Vue {
         searchRequest.searchType = 'l'
         searchRequest.latitude = latLon.latitude
         searchRequest.longitude = latLon.longitude
+      } else {
+        searchRequest.searchType = 's'
+        searchRequest.latitude = -1
+        searchRequest.longitude = -1
       }
 
       this.resultsSearchText = this.typedText
-
       this.$router.push({ path: this.page!, query: searchRouteBuilder.toParameters(searchRequest) })
     }
   }
