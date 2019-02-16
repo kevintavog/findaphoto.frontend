@@ -27,7 +27,10 @@
       <div style="clear:both;"></div>
       <div class="group-outer-container">
         <div class="group-inner-container">
-          <div v-if="!hideGroups" class="group-item-header"> {{groupName(group)}} </div>
+          <span v-if="!hideGroups" class="group-item-header"> {{groupName(group)}} </span>
+          <router-link class="is-pulled-right map-link" :to="groupMapLink(group)" >
+            <b-icon icon="map" size="is-medium"/>
+          </router-link>
           <div v-if="!hideGroups" class="group-item-secondary"> {{locationSynopsis(group)}} </div>
 
           <div class="group-item-list">
@@ -106,6 +109,12 @@ export default class SearchResultsList extends Vue {
 
   private get isSearching(): boolean {
     return this.$store.state.serverResponse.isSearching
+  }
+
+  private groupMapLink(group: SearchGroup) {
+    let first = group.items[0]
+    let date = `${dataDisplayer.itemYear(first)}${dataDisplayer.itemMonth(first)}${dataDisplayer.itemDay(first)}`
+    return { path: '/map', query: { t: 's', q: `date:${date}` } }
   }
 
   private groupName(group: SearchGroup): string {
@@ -203,6 +212,7 @@ export default class SearchResultsList extends Vue {
 .group-outer-container {
   background: #303030;
   margin-bottom: 1.5em;
+  text-align: left;
 }
 .group-inner-container {
   margin-top: 0;
@@ -214,6 +224,9 @@ export default class SearchResultsList extends Vue {
   font-size: 2em;
   padding-left: 5px;
   text-align: left;
+}
+.map-link {
+  margin-right: 8px;
 }
 .group-item-secondary {
   padding-left: 10px;
