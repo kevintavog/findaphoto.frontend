@@ -28,6 +28,7 @@
       <div class="group-outer-container">
         <div class="group-inner-container">
           <div v-if="!hideGroups" class="group-item-header"> {{groupName(group)}} </div>
+          <div v-if="!hideGroups" class="group-item-secondary"> {{locationSynopsis(group)}} </div>
 
           <div class="group-item-list">
             <div v-for="item in group.items" :key="item.id" class="group-item">
@@ -114,6 +115,23 @@ export default class SearchResultsList extends Vue {
     return group.name
   }
 
+  private locationSynopsis(group: SearchGroup): string {
+    if (group.locations && group.locations.length > 0) {
+      let countries = group.locations
+      let states = countries.flatMap( (c) => c.states ).sort( (a, b) => b.count - a.count)
+      let cities = states.flatMap( (s) => s.cities).sort( (a, b) => b.count - a.count)
+      let sites = cities.flatMap( (c) => c.sites).sort( (a, b) => b.count - a.count)
+
+      let cityDisplay = cities.map( (c) => c.city ).join(', ')
+      var siteDisplay = sites.map( (s) => s.site ).join(', ')
+      if (siteDisplay.length > 0) {
+        return siteDisplay + ' - ' + cityDisplay
+      }
+      return cityDisplay
+    }
+    return ''
+  }
+
   private get searchDescription(): string {
     return searchRouteBuilder.toReadableString(this.request)
   }
@@ -188,6 +206,12 @@ export default class SearchResultsList extends Vue {
   font-size: 2em;
   padding-left: 5px;
   text-align: left;
+}
+.group-item-secondary {
+  padding-left: 10px;
+  padding-bottom: 3px;
+  text-align: left;
+  color: #c5c5c5;
 }
 .group-item-list {
   -webkit-flex-wrap: wrap;

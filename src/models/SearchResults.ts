@@ -16,6 +16,7 @@ export interface SearchGroup {
     name: string
     items: SearchItem[]
     resultIndex: number
+    locations: GroupCountryLocation[]
 }
 
 export interface SearchItem {
@@ -39,6 +40,29 @@ export interface SearchItem {
     distanceKm: number
     tags: string[]
     width: number,
+}
+
+export interface GroupCountryLocation {
+    country: string
+    count: number
+    states: GroupStateLocation[]
+}
+
+export interface GroupStateLocation {
+    state: string
+    count: number
+    cities: GroupCityLocation[]
+}
+
+export interface GroupCityLocation {
+    city: string
+    count: number
+    sites: GroupSiteLocation[]
+}
+
+export interface GroupSiteLocation {
+    site: string
+    count: number
 }
 
 export const emptySearchItem: SearchItem = {
