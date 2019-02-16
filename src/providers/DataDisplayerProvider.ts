@@ -121,6 +121,14 @@ export class DataDisplayerProvider {
         return item.path.substr(0, last).replace(/\\/g, '?').replace(/ /g, '?') + '*'
     }
 
+    public dateToLocaleDate(date: Date) {
+        if (date != null) {
+            const d = new Date(date)
+            return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        }
+        return '?'
+    }
+
     public dateToLocaleDateAndTime(date: Date) {
         if (date != null) {
             const d = new Date(date)
