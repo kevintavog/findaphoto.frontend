@@ -5,8 +5,13 @@
     </h2>
 
     <div v-else-if="indexResponse" class="info" >
+      <h1>
+        Find A Photo {{indexResponse.versionNumber}}
+      </h1>
+
+      <br>
       <h3>
-        ElasticSearch version {{indexResponse.dependencyInfo.elasticSearch.version}} is 
+        ElasticSearch {{indexResponse.dependencyInfo.elasticSearch.version}} is 
           {{indexResponse.dependencyInfo.elasticSearch.indexStatus}} for 
           '{{indexResponse.dependencyInfo.elasticSearch.index}}'
       </h3>
