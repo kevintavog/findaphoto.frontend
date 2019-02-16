@@ -112,8 +112,8 @@ export default class SearchResultsList extends Vue {
   }
 
   private groupMapLink(group: SearchGroup) {
-    let first = group.items[0]
-    let date = `${dataDisplayer.itemYear(first)}${dataDisplayer.itemMonth(first)}${dataDisplayer.itemDay(first)}`
+    const first = group.items[0]
+    const date = `${dataDisplayer.itemYear(first)}${dataDisplayer.itemMonth(first)}${dataDisplayer.itemDay(first)}`
     return { path: '/map', query: { t: 's', q: `date:${date}` } }
   }
 
@@ -121,20 +121,20 @@ export default class SearchResultsList extends Vue {
     if (this.dayInGroupName && group.items.length > 0) {
       return group.name + ' - ' + SearchResultsList.days[new Date(group.items[0].createdDate).getDay()]
     }
-    let first = group.items[0].createdDate
+    const first = group.items[0].createdDate
     return SearchResultsList.days[new Date(first).getDay()] + ', ' + dataDisplayer.dateToLocaleDate(first)
   }
 
   private locationSynopsis(group: SearchGroup): string {
     if (group.locations && group.locations.length > 0) {
 
-      let display = []
+      const display = []
       for (const country of group.locations.slice().sort( (a, b) => b.count - a.count)) {
         for (const city of country.states.flatMap( (s) => s.cities).sort( (a, b) => b.count - a.count)) {
-          let sites = city.sites.slice().sort( (a, b) => b.count - a.count)
-          var siteDisplay = sites.map( (s) => s.site ).join(', ')
+          const sites = city.sites.slice().sort( (a, b) => b.count - a.count)
+          let siteDisplay = sites.map( (s) => s.site ).join(', ')
           if (siteDisplay.length > 0) {
-            let lastCommaIndex = siteDisplay.lastIndexOf(',')
+            const lastCommaIndex = siteDisplay.lastIndexOf(',')
             if (lastCommaIndex > 0) {
               siteDisplay = siteDisplay.substr(0, lastCommaIndex) + ' & ' + siteDisplay.substr(lastCommaIndex + 1)
             }
