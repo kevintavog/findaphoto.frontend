@@ -635,7 +635,7 @@ export default class Map extends Vue {
 .selected-item-dialog {
   background-color: #606060;
   width: 50%;
-  top: 30%;
+  top: 38%;
   left: 27%;
 }
 
@@ -648,7 +648,7 @@ export default class Map extends Vue {
 
 .info-image-portrait {
   max-width: 50%;
-  max-height: 50%;
+  max-height: 20%;
 }
 
 .info-image-landscape {
