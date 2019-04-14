@@ -133,18 +133,16 @@ import SearchBar from '@/components/SearchBar.vue'
 import { GpxAnalyzer, GpxAnalyzerTrack } from '@/models/GpxAnalyzer'
 import { GpxFile, GpxParser, GpxSegment } from '@/models/Gpx'
 import { SearchRequest } from '@/models/SearchRequest'
-import { SearchItem, SearchResults, emptySearchItem } from '@/models/SearchResults'
+import { leafletExtensions } from '@/models/LeafletExtensions'
+import { SearchGroup, SearchItem, SearchResults, emptySearchItem } from '@/models/SearchResults'
 import { locationProvider, FPLocation } from '@/providers/LocationProvider'
 import { searchRouteBuilder } from '@/providers/SearchRouteBuilder'
 import { searchService } from '@/services/SearchService'
 import { dataDisplayer } from '@/providers/DataDisplayerProvider'
+import { GpxFeatureGroup } from '@/utils/GpxFeatureGroup.ts'
 import L from 'leaflet'
 import 'leaflet.markercluster'
 import { setTimeout } from 'timers'
-
-class GpxFeatureGroup extends L.FeatureGroup {
-    public gpxLayer = true
-}
 
 @Component({
     components: {
@@ -285,6 +283,8 @@ export default class Map extends Vue {
                         this.markers.push(this.createMarker(item, this.markers.length))
                     }
                 })
+                // Experimental path between media
+                // this.addGroupPath(group)
             })
 
             if (this.request.first === 1) {
@@ -307,6 +307,34 @@ export default class Map extends Vue {
         if (this.totalMatches > 0) {
             this.map!.fitBounds([this.southWestCornerLatLng, this.northEastCornerLatLng], undefined)
         }
+    }
+
+    private addGroupPath(group: SearchGroup): void {
+        // Earliest to latest
+        const sorted = group.items.slice().sort( (a: SearchItem, b: SearchItem) =>
+            new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime())
+        const runLatLngList = sorted.map( (i) => {
+            return new L.LatLng(i.latitude, i.longitude)
+        })
+        const runLine = new L.Polyline(
+            runLatLngList,
+            { color: 'purple', weight: 3, dashArray: '', opacity: 1.0 })
+        runLine.on('click', (e) => {
+            const me = e as any
+            const line = runLine as any
+            const [firstIndex, secondIndex] = leafletExtensions.findSegment(me.latlng, line.getLatLngs())
+            const first = sorted[firstIndex]
+            const second = sorted[secondIndex]
+
+            const firstTime = new Date(first.createdDate).toLocaleTimeString()
+            const secondTime = new Date(second.createdDate).toLocaleTimeString()
+            // console.log(`clicked on a line: ${first.imageName} [${firstTime}] -
+            // ${second.imageName} [${secondTime}] [${firstIndex}, ${secondIndex}]`)
+        })
+
+        const runLayer = new GpxFeatureGroup([runLine])
+        runLayer.addTo(this.map as L.Map)
+        this.addToMapLayersControl(runLayer, `#${group.name}`)
     }
 
     @Watch('$route')

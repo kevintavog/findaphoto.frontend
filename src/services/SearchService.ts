@@ -6,7 +6,8 @@ import store from '@/store/store'
 import { SearchRequest } from '@/models/SearchRequest'
 
 class SearchService {
-  private static baseServerUrl = process.env.NODE_ENV === 'production' ? 'http://jupiter/findaphoto/' : '/'
+  // private static baseServerUrl = process.env.NODE_ENV === 'production' ? 'http://jupiter/findaphoto/' : '/'
+  private static baseServerUrl = process.env.NODE_ENV === 'production' ? 'http://localhost:5000/' : '/'
 
   // Goto the 1-based page number
   public gotoPage(pageNumber: number) {
